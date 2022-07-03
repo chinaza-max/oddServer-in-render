@@ -4,13 +4,51 @@ class node {
         this.Odd = Odd;
         this.ChangeOdd(reduceBy);
     }
-    ChangeOdd(reduceBy) {
-        // console.log(reduceBy)
-        /* if(reduceBy){
-            this.Odd= (this.Odd-(this.Odd*(reduceBy/100))).toFixed(2)
-             
-           // console.log((this.Odd-(this.Odd*(reduceBy/100))).toFixed(2))
-         }*/
+    exponPlusPoint2(x){
+        let numlog = Math.log10(x) + 0.2
+        let newNum = Math.exp(numlog)
+        return newNum
+
+    }
+    exponPlusOne(x){
+        let numlog = Math.log10(x) + 1
+        let newNum = Math.exp(numlog)
+        return newNum
+    }
+    ChangeOdd(Odds) {
+        if (Odds) {
+            for (let marketType in Odds) {
+               if ((Object.keys(Odds[marketType]).length) > 2 && marketType=='correctScore') {
+
+                    for (let index = 0; index < (Object.keys(Odds[marketType]).length); index++) {
+                        var Odd = Odds[marketType][index]['Odd'];
+                        if (Odd == 'Infinity' || Odd >4029){
+                            Odd = 4029
+                        }
+                        Odds[marketType][index]['Odd'] = this.exponPlusOne(Odd).toFixed(2)
+                    }
+                }
+                else if ((Object.keys(Odds[marketType]).length) > 2 && marketType=='Under'){
+                                      for (let index = 0; index < (Object.keys(Odds[marketType]).length); index++) {
+                                        var Odd = Odds[marketType][index]['Odd'];
+                                        if (Odd == 'Infinity' || Odd >4029){
+                                            Odd = 4029
+                                        }
+                                        Odds[marketType][index]['Odd'] = this.exponPlusPoint2(Odd).toFixed(2)
+                                    }  
+                }
+                else if (marketType=='GoalLessDraw'){
+                      var Odd = Odds[marketType]['Odd'];
+                      if (Odd == 'Infinity' || Odd >4029){
+                          Odd = 4029
+                      }
+                      Odds[marketType]['Odd'] = this.exponPlusOne(Odd).toFixed(2)
+                  }  
+
+
+            }
+            return Odds
+        }
     }
 }
 
@@ -215,20 +253,20 @@ class odds {
                 let objs = new node("GG", odd.toFixed(2));
                 this.Odds["GoalGoal"] = objs;
             }
-        }   
+        }
     }
-    GoalGoalAndHomeWin(){
+    GoalGoalAndHomeWin() {
         let total = 0
         for (let i = 1; i <= this.GoalLeve; i++) {
             for (let j = 1; j <= this.GoalLeve; j++) {
-                 
-                 if(i>j){
+
+                if (i > j) {
                     total += this.Home[i] * this.Away[j];
-                 }
-                 else{
-                     break;
-                 }
-                
+                }
+                else {
+                    break;
+                }
+
             }
             if (i == this.GoalLeve) {
                 let odd = 1 / total;
@@ -237,17 +275,17 @@ class odds {
             }
         }
     }
-    GoalGoalAndAwayWin(){
+    GoalGoalAndAwayWin() {
         let total = 0
         for (let i = 1; i <= this.GoalLeve; i++) {
             for (let j = 2; j <= this.GoalLeve; j++) {
-            
-                 if(j>i){
-                   // console.log(`---------yes-------`)
+
+                if (j > i) {
+                    // console.log(`---------yes-------`)
                     //console.log(`${i}---${j}`)
-                   // console.log(`---------yes--------`)
+                    // console.log(`---------yes--------`)
                     total += this.Home[i] * this.Away[j];
-                 }
+                }
             }
             if (i == this.GoalLeve) {
                 let odd = 1 / total;
@@ -266,7 +304,8 @@ class odds {
 let init = new odds(1.765, 1.353)
 init.Setting(66.5, 50.5)
 init.CalculateOdds()
+let table = init.viewTable()
+console.log(new node().ChangeOdd(table));
 
 
-
-console.log(init.viewTable())
+// console.log(init.viewTable())
