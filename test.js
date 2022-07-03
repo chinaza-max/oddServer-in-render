@@ -1,10 +1,7 @@
-
-
 class node {
     constructor(Market, Odd, reduceBy = null) {
         this.Market = Market;
         this.Odd = Odd;
-
         this.ChangeOdd(reduceBy);
     }
     ChangeOdd(reduceBy) {
@@ -16,6 +13,7 @@ class node {
          }*/
     }
 }
+
 class odds {
     constructor(HG, AG) {
 
@@ -266,7 +264,7 @@ class odds {
 }
 
 let init = new odds(1.765, 1.353)
-init.Setting(66.5, 50.5);
+init.Setting(66.5, 50.5)
 init.CalculateOdds()
 
 
