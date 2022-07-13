@@ -1,5 +1,5 @@
 const bcrypt=require('bcrypt');
-const User=require("../MongoDB/Models/Admin")
+const User=require("../MongoDB/Model/User/Admin")
 const jwt = require('jsonwebtoken');
 const LocalStrategy=require('passport-local').Strategy
 const Redis = require('ioredis')
@@ -11,12 +11,11 @@ const redis = new Redis({
     username: "default", // needs Redis >= 6
     password: "vr1ksiXL79YnSxirC7ROVPfNVrsSQOHo",
   });
-
-  */
+*/
 const maxNumberOfFailedLogins = 3;
 const timeWindowForFailedLogins = 60 * 60 * 1;
 
-const signUpAdminStrategy=new LocalStrategy({usernameField: 'userName',
+const signUpAdmin=new LocalStrategy({usernameField: 'userName',
 passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=>{
             
     const user=new User()
@@ -45,7 +44,10 @@ passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=
 
                     const hashedPassword=await bcrypt.hash(password,10)
                     user.password=hashedPassword,
-                    user.userName=userName
+                    user.firstName=userName,
+                    user.lastName=userName,
+                    user.tel=userName,
+                    user.email=userName,
                     user.save(async function(err,data){
                         if(err){
                             return done(err,null)
@@ -72,7 +74,7 @@ passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=
                                     }
                                 });
                             }catch(e){
-                                console.log("check signUpAdminStrategy file where the jwt is been signed")
+                                console.log("check signUpSuperAdmin file where the jwt is been signed")
                                 throw e
                             }
                             
@@ -84,7 +86,6 @@ passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=
                 }
             }
         })
-    
 })
 
-module.exports=signUpAdminStrategy;
+module.exports=signUpAdmin;

@@ -1,5 +1,5 @@
 const bcrypt=require('bcrypt');
-const User=require("../MongoDB/Models/SuperAdmin")
+const User=require("../MongoDB/Model/User/SuperAdmin")
 const jwt = require('jsonwebtoken');
 const LocalStrategy=require('passport-local').Strategy
 const Redis = require('ioredis')
@@ -18,7 +18,7 @@ const maxNumberOfFailedLogins = 3;
 const timeWindowForFailedLogins = 60 * 60 * 1
 
 
-const loginAdminStrategy=new LocalStrategy({usernameField: 'userName',
+const loginSuperAdmin=new LocalStrategy({usernameField: 'userName',
     passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=>{
    
         User.findOne({userName},async(err,user)=>{
@@ -76,4 +76,4 @@ const loginAdminStrategy=new LocalStrategy({usernameField: 'userName',
         })
 })
 
-module.exports=loginAdminStrategy;
+module.exports=loginSuperAdmin;

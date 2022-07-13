@@ -1,5 +1,5 @@
 const bcrypt=require('bcrypt');
-const User=require("../MongoDB/Models/Admin")
+const User=require("../MongoDB/Model/User/Admin")
 const jwt = require('jsonwebtoken');
 const LocalStrategy=require('passport-local').Strategy
 const Redis = require('ioredis')

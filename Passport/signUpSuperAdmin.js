@@ -1,5 +1,5 @@
 const bcrypt=require('bcrypt');
-const User=require("../MongoDB/Models/SuperAdmin")
+const User=require("../MongoDB/Model/User/SuperAdmin")
 const jwt = require('jsonwebtoken');
 const LocalStrategy=require('passport-local').Strategy
 const Redis = require('ioredis')
@@ -44,7 +44,10 @@ passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=
 
                     const hashedPassword=await bcrypt.hash(password,10)
                     user.password=hashedPassword,
-                    user.userName=userName
+                    user.firstName=userName,
+                    user.lastName=userName,
+                    user.tel=userName,
+                    user.email=userName,
                     user.save(async function(err,data){
                         if(err){
                             return done(err,null)
