@@ -36,4 +36,4 @@ const competitionRegistrationSchema= new mongoose.Schema({
 },
 { timestamp: true });
 
-module.exports=mongoose.model("competitionRegistration",competitionRegistrationSchema);
+module.exports=mongoose.model("CompetitionRegistration",competitionRegistrationSchema);

@@ -3,7 +3,7 @@ const mongoose=require('mongoose');
 const fixtureSchema= new mongoose.Schema({
     competitionId:{
         type: String,
-        ref: "competitionRegistrations",
+        ref: "CompetitionRegistrations",
         required: true,
     },
     homeTeamId:{
