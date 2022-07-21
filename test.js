@@ -262,8 +262,8 @@ class odds {
         return this.Odds
     }
 }
-
-let init = new odds(1.765, 1.353)
+ 
+let init = new odds(1.7,3.43)
 init.Setting(66.5, 50.5)
 init.CalculateOdds()
 
