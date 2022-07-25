@@ -16,14 +16,7 @@ const fixtureSchema= new mongoose.Schema({
         ref: "teams",
         required: true,
     },
-    homeTeamGoal:{ 
-        type: Number, 
-        default: 0 
-    },
-    awayTeamGoal:{ 
-        type: Number, 
-        default: 0 
-    },
+    
     competitionType: {
         type: String,
         required: [true, "competitionType is required"],
@@ -43,10 +36,20 @@ const fixtureSchema= new mongoose.Schema({
         trim:true
     } 
     ,
+    result:{
+        homeTeamGoal:{ 
+            type: Number, 
+            default: 0 
+        },
+        awayTeamGoal:{ 
+            type: Number, 
+            default: 0 
+        },
+    },
     status:{ 
         type:String,
         required:true,
-        enum: ["open", "close", "ongoing"],
+        enum: ["open", "close", "ongoing","cancelled"],
     } 
 },
 { timestamp: true });
