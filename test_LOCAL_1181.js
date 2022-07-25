@@ -4,60 +4,13 @@ class node {
         this.Odd = Odd;
         this.ChangeOdd(reduceBy);
     }
-    expon(x) {
-        let numlog = Math.log10(x) 
-        let newNum = Math.exp(numlog)
-        return newNum
-
-    }
-    exponPlusOne(x) {
-        let numlog = Math.log10(x) + 1
-        let newNum = Math.exp(numlog)
-        return newNum
-    }
-    ChangeOdd(Odds) {
-        if (Odds) {
-            for (let marketType in Odds) {
-                if ((Object.keys(Odds[marketType]).length) > 2) {
-
-                    for (let index = 0; index < (Object.keys(Odds[marketType]).length); index++) {
-                        var Odd = Odds[marketType][index]['Odd'];
-                        if (Odd == 'Infinity' || Odd > 40290) {
-                            Odd = 40290
-                        }
-                        Odds[marketType][index]['Odd'] = this.expon(Odd).toFixed(2)
-                    }
-                }
-                else if (marketType != null) {
-                    var Odd = Odds[marketType]['Odd'];
-
-                    if (Odd == 'Infinity' || Odd > 40290) {
-                        Odd = 40290
-                    }
-                    Odds[marketType]['Odd'] = this.expon(Odd).toFixed(2)
-                }
-                // else if ((Object.keys(Odds[marketType]).length) > 2 && marketType=='Under'){
-                //                       for (let index = 0; index < (Object.keys(Odds[marketType]).length); index++) {
-                //                         var Odd = Odds[marketType][index]['Odd'];
-                //                         if (Odd == 'Infinity' || Odd >4029){
-                //                             Odd = 4029
-                //                         }
-                //                         Odds[marketType][index]['Odd'] = this.exponPlusPoint2(Odd).toFixed(2)
-                //                     }  
-                // }
-                // else if (marketType=='GoalLessDraw'){
-                //       var Odd = Odds[marketType]['Odd'];
-                //       if (Odd == 'Infinity' || Odd >4029){
-                //           Odd = 4029
-                //       }
-                //       Odds[marketType]['Odd'] = this.exponPlusOne(Odd).toFixed(2)
-                //   }
-
-
-
-            }
-            return Odds
-        }
+    ChangeOdd(reduceBy) {
+        // console.log(reduceBy)
+        /* if(reduceBy){
+            this.Odd= (this.Odd-(this.Odd*(reduceBy/100))).toFixed(2)
+             
+           // console.log((this.Odd-(this.Odd*(reduceBy/100))).toFixed(2))
+         }*/
     }
 }
 
@@ -309,13 +262,11 @@ class odds {
         return this.Odds
     }
 }
-
-let init = new odds(0.74, 1.62)
-init.Setting(66.5, 50.5);
+ 
+let init = new odds(1.7,3.43)
+init.Setting(66.5, 50.5)
 init.CalculateOdds()
-let table = init.viewTable()
-console.log(table);
-console.log(new node().ChangeOdd(table));
 
 
-// console.log(init.viewTable())
+
+console.log(init.viewTable())

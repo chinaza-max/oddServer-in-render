@@ -310,7 +310,7 @@ class odds {
     }
 }
 
-let init = new odds(0.74, 1.62)
+let init = new odds(0.37, 4.163)
 init.Setting(66.5, 50.5);
 init.CalculateOdds()
 let table = init.viewTable()

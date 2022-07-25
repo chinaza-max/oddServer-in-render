@@ -309,9 +309,15 @@ class odds {
         return this.Odds
     }
 }
+<<<<<<< HEAD
+ 
+let init = new odds(1.7,3.43)
+init.Setting(66.5, 50.5)
+=======
 
-let init = new odds(0.74, 1.62)
+let init = new odds(0.37, 4.163)
 init.Setting(66.5, 50.5);
+>>>>>>> b043a52ddfae5b3d23630587c53a7f434d134f58
 init.CalculateOdds()
 let table = init.viewTable()
 console.log(table);
