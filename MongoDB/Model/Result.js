@@ -28,12 +28,18 @@ const ResultSchema= new mongoose.Schema({
     },
     scores:{ 
         home:{ 
-            type: Number, 
-            default: 0 
+            goal:{ 
+                type: Number, 
+                default: 0 
+            },
+            player:[]
         },
         away:{ 
-            type: Number, 
-            default: 0 
+            goal:{ 
+                type: Number, 
+                default: 0 
+            },
+            player:[]
         }, 
     }, 
     result:{ 
