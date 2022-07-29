@@ -16,7 +16,6 @@ const fixtureSchema= new mongoose.Schema({
         ref: "teams",
         required: true,
     },
-    
     competitionType: {
         type: String,
         required: [true, "competitionType is required"],
@@ -34,17 +33,6 @@ const fixtureSchema= new mongoose.Schema({
         type:String,
         required:true,
         trim:true
-    } 
-    ,
-    result:{
-        homeTeamGoal:{ 
-            type: Number, 
-            default: 0 
-        },
-        awayTeamGoal:{ 
-            type: Number, 
-            default: 0 
-        },
     },
     status:{ 
         type:String,

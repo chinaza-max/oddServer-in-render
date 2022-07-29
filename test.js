@@ -8,7 +8,6 @@ class node {
         let numlog = Math.log10(x) 
         let newNum = Math.exp(numlog)
         return newNum
-
     }
     exponPlusOne(x) {
         let numlog = Math.log10(x) + 1
@@ -16,8 +15,13 @@ class node {
         return newNum
     }
     ChangeOdd(Odds) {
+
+    
         if (Odds) {
+           
             for (let marketType in Odds) {
+                
+                console.log(Object.keys(Odds[marketType]))
                 if ((Object.keys(Odds[marketType]).length) > 2) {
 
                     for (let index = 0; index < (Object.keys(Odds[marketType]).length); index++) {
@@ -310,8 +314,8 @@ class odds {
     }
 }
 
-let init = new odds(0.74, 1.62)
-init.Setting(66.5, 50.5);
+let init = new odds(1.74, 3.62)
+//init.Setting(66.5, 50.5);
 init.CalculateOdds()
 let table = init.viewTable()
 console.log(table);

@@ -17,6 +17,10 @@ const teamSchema= new mongoose.Schema({
         required:true,
         trim:true
     },
+    currentSession:{ 
+        type:String,
+        trim:true
+    },
     teamCreateYear:{
         type: Date,
         trim: true,

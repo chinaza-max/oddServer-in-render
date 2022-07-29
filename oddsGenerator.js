@@ -1,7 +1,7 @@
 /*
-------------------------------------------------------------------
-- formatOdd helps in  re-arranging odd into readable json format -
-------------------------------------------------------------------
+---------------------------------------------------------------------------------
+- formatOdd helps in  re-arranging odd into readable json format and reduce odd -
+---------------------------------------------------------------------------------
 */
 
 class formatOdd {
@@ -30,12 +30,13 @@ class odds {
 
     constructor(HG, AG) {
 
-        /*--------------------------------
-        -                                 -
-            HG=Home goal expentancy
-            HG=Away goal expentancy
-        -                                 -
-        -----------------------------------
+        /*----------------------------------------------
+        Number of goals that is expected from both team
+                -                                 -
+                    HG=Home goal expentancy
+                    HG=Away goal expentancy
+                -                                 -
+        -------------------------------------------------
         */
         this.HG = HG;
         this.AG = AG;
@@ -49,7 +50,7 @@ class odds {
 
          /*
         ----------------------------------------------------------
-        -        this holds the percentage of goals probability  -
+        -        This holds the percentage of goals probability  -
         -                -     1    2   3           5            -
         -                home 20% 90%   90%  ----                -
         -                away 28%  40%  78%  ----                -
@@ -69,7 +70,7 @@ class odds {
 
         /*
         -----------------------------------------------------------------------------------
-        -  number of times the under market should be run to get all possible combination -
+        -  Number of times the under market should be run to get all possible combination -
         -----------------------------------------------------------------------------------
         */
         this.#UnderM = [1, 2, 3, 4, 5, 6];
@@ -86,7 +87,7 @@ class odds {
 
         /*
         -----------------------------------------------------------------------------------------------------
-        -           this array is for indicating the unders(market) that should calculated                   -
+        -           This array is for indicating the unders(market) that should calculated                   -
         - Example the value in the zero index 0 indicate under 0.5 while that in 1 index indicate under 1.5; -
         -                                while for over                                                      - 
         - Example the value in the zero index 1 indicate over 0.5 while that in 1 index indicate over 1.5; -

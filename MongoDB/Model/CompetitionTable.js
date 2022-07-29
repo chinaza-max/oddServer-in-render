@@ -7,8 +7,7 @@ const competitionTableSchema= new mongoose.Schema({
         ref: "CompetitionRegistrations",
         required: true,
     },
-    position:[], 
-    
+    position:[]
 },
 { timestamp: true });
 
