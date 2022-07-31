@@ -16,15 +16,6 @@ const fixtureSchema= new mongoose.Schema({
         ref: "teams",
         required: true,
     },
-    competitionType: {
-        type: String,
-        required: [true, "competitionType is required"],
-        enum: ["interSchool", "intraSchool"],
-    },
-    competitionName: {
-        type: String,
-        required: [true, "competitionName is required"],
-    },
     startTime:{ 
         type: Schema.Types.ObjectId,
         required: true 

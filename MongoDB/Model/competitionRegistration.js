@@ -1,7 +1,7 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 
-const competitionRegistrationSchema= new mongoose.Schema({
-   
+const competitionRegistrationSchema = new mongoose.Schema({
+
     competitionType: {
         type: String,
         required: [true, "competitionType is required"],
@@ -11,29 +11,30 @@ const competitionRegistrationSchema= new mongoose.Schema({
         type: String,
         required: [true, "competitionName is required"],
     },
-    startDate:{ 
+    session: {
+        type: String,
+        required: true
+    },
+    startDate: {
         type: Schema.Types.ObjectId,
-        required: true 
+        required: true
     },
-    hostName:{ 
-        type:String,
-        required:true,
-        trim:true
+    hostName: {
+        type: String,
+        required: true,
+        trim: true
     },
-    venue:{
-        type:String,
-        required:true,
-        trim:true
+    location: {
+        type: String,
+        required: true,
+        trim: true
     },
-    homeGoal:{ 
-        type: Number, 
-        default: 0 
-    },
-    awayGoal:{ 
-        type: Number, 
-        default: 0 
-    },
-},
-{ timestamp: true });
+    Teams: {
+        type: [Schema.Types.ObjectId],
+        required: true
+    }
 
-module.exports=mongoose.model("CompetitionRegistration",competitionRegistrationSchema);
+},
+    { timestamp: true });
+
+module.exports = mongoose.model("CompetitionRegistration", competitionRegistrationSchema);

@@ -54,4 +54,72 @@ const ResultSchema= new mongoose.Schema({
 },
 { timestamp: true });
 
+ResultSchema.methods.getTable = (competitionId) => {
+    const aggregate = await this.aggregate([
+
+      // do a join with the table fixture,  
+      {
+        $lookup: {
+          from: 'fixture',
+          localField: 'fixtureId',
+          foreignField: '_id',
+          as: 'fixture',
+        }
+      },
+      { $unwind: '$fixture' },
+      // do a join on another table called CompetitionRegistration
+      {
+        $lookup: {
+          from: 'CompetitionRegistration',
+          localField: 'competitionId',
+          foreignField: '_id',
+          as: 'competition',
+        }
+      },
+      { $unwind: '$competition' },
+      { $match: {"competition._id": competitionId}  } 
+
+    
+      // group the data according to the competions
+    //   {
+    
+    //     $group: { _id: "$competition._id", competition: { $push: "$$ROOT" } }
+    
+    //   },
+    ]);
+    return aggregate;
+}
+
+ResultSchema.methods.getTeamResults = (teamId) => {
+    const aggregate = await this.aggregate([
+  
+        // do a join with the table fixture,  
+        {
+          $lookup: {
+            from: 'fixture',
+            localField: 'fixtureId',
+            foreignField: '_id',
+            as: 'fixture',
+          }
+        },
+        { $unwind: '$fixture' },
+        // do a join on another table called CompetitionRegistration
+        {
+          $lookup: {
+            from: 'CompetitionRegistration',
+            localField: 'competitionId',
+            foreignField: '_id',
+            as: 'competition',
+          }
+        },
+        { $unwind: '$competition' },
+
+        //filter the result to just the teams 
+        { $match: 
+            {$or:[{"fixture.homeTeamId": teamId},{"fixture.awayTeamId":10}]  } 
+         },
+      
+      ]);
+    return aggregate;
+}
 module.exports=mongoose.model("resultS",ResultSchema);
