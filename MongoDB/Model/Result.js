@@ -116,7 +116,7 @@ ResultSchema.methods.getTeamResults = (teamId) => {
 
         //filter the result to just the teams 
         { $match: 
-            {$or:[{"fixture.homeTeamId": teamId},{"fixture.awayTeamId":10}]  } 
+            {$or:[{"fixture.homeTeamId": teamId},{"fixture.awayTeamId":teamId}]  } 
          },
       
       ]);
