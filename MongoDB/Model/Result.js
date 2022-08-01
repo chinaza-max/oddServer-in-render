@@ -71,7 +71,7 @@ ResultSchema.methods.getTable = (competitionId) => {
       {
         $lookup: {
           from: 'CompetitionRegistration',
-          localField: 'competitionId',
+          localField: 'fixture.competitionId',
           foreignField: '_id',
           as: 'competition',
         }
@@ -107,7 +107,7 @@ ResultSchema.methods.getTeamResults = (teamId) => {
         {
           $lookup: {
             from: 'CompetitionRegistration',
-            localField: 'competitionId',
+            localField: 'fixture.competitionId',
             foreignField: '_id',
             as: 'competition',
           }
