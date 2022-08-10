@@ -112,13 +112,13 @@ ResultSchema.methods.getTeamResults = (teamId) => {
             as: 'competition',
           }
         },
+
         { $unwind: '$competition' },
 
         //filter the result to just the teams 
         { $match: 
             {$or:[{"fixture.homeTeamId": teamId},{"fixture.awayTeamId":teamId}]  } 
          },
-      
       ]);
     return aggregate;
 }

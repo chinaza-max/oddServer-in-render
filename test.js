@@ -14,9 +14,8 @@ class node {
         let newNum = Math.exp(numlog)
         return newNum
     }
-    ChangeOdd(Odds) {
-
     
+    ChangeOdd(Odds) {
         if (Odds) {
            
             for (let marketType in Odds) {

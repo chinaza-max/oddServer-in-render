@@ -29,9 +29,13 @@ const competitionRegistrationSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    Teams: {
+    teams: {
         type: [Schema.Types.ObjectId],
         required: true
+    },
+    status: {
+        type: String, 
+        enum: ["upcoming", "ongoing","ended"],
     }
 
 },

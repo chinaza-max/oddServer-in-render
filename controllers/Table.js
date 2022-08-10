@@ -2,7 +2,7 @@ const competitionRegistration = require("../MongoDB/Model/competitionRegistratio
 const Result = require("../MongoDB/Model/Result");
 
 const leagueTable = () => {
-const results  = await Result.find()
+const results  = await Result.find();
 if(!results) return;
 const tableRaw = await results.getTeamResults(competitionId);
 if(!tableRaw) return;
