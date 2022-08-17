@@ -17,7 +17,7 @@ const fixtureSchema= new mongoose.Schema({
         required: true,
     },
     startTime:{ 
-        type: Schema.Types.ObjectId,
+        type:Date,
         required: true 
     },
     venue:{ 

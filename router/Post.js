@@ -34,5 +34,8 @@ router.post('/updateFixtures',(req, res)=>{
      
 })
 
+router.post('/updateResult',(req, res)=>{
+     
+})
 module.exports=router;
 
