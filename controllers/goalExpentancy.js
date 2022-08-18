@@ -56,4 +56,5 @@ const calGoalExpectancy = (competitionName,date,homeId,awayId,fixtureId) => {
     console.log(reduce.ChangeOdd(engine.viewTable()));
 }   
 
+export default calGoalExpectancy;
 
