@@ -1,7 +1,7 @@
 const Result = require("../MongoDB/Model/Result");
 const {odds,formatOdd} =require("../oddCalculation/oddsGenerator")
 
-const calGoalExpectancy = (competitionName,date,homeId,awayId) => {
+const calGoalExpectancy = (competitionName,date,homeId,awayId,fixtureId) => {
     const results  = await Result.find();
     if(!results) return;
     const result1 = await results.getTotalscorePerCompetition(competitionName,date);
