@@ -366,3 +366,5 @@ let reduce = new formatOdd();
 // reduce.CalculateOdds();
 
 console.log(reduce.ChangeOdd(engine.viewTable()));
+
+module.exports={odds,formatOdd} ;
