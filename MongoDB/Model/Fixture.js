@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 
 const fixtureSchema= new mongoose.Schema({
     competitionId:{
-        type: String,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: "CompetitionRegistrations",
         required: true,
     },

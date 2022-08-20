@@ -16,10 +16,15 @@ const competitionRegistrationSchema = new mongoose.Schema({
         required: true
     },
     startDate: {
-        type: Schema.Types.ObjectId,
+        type:Date,
         required: true
     },
     hostName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    school: {
         type: String,
         required: true,
         trim: true
@@ -30,12 +35,13 @@ const competitionRegistrationSchema = new mongoose.Schema({
         trim: true
     },
     teams: {
-        type: [Schema.Types.ObjectId],
+        type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
     status: {
         type: String, 
         enum: ["upcoming", "ongoing","ended"],
+        default: "upcoming"
     }
 
 },

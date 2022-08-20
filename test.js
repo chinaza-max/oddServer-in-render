@@ -319,6 +319,6 @@ init.CalculateOdds()
 let table = init.viewTable()
 console.log(table);
 console.log(new node().ChangeOdd(table));
-
+console.log("yeah yeah yeah yeah yeah ");
 
 // console.log(init.viewTable())

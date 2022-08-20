@@ -2,7 +2,7 @@ const mongoose=require('mongoose');
 
 const ResultSchema= new mongoose.Schema({
     fixtureId:{
-        type: String,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: "fixture",
         required: true
     },
@@ -54,7 +54,7 @@ const ResultSchema= new mongoose.Schema({
 },
 { timestamp: true });
 
-ResultSchema.methods.getTable = (competitionId) => {
+ResultSchema.methods.getTable =async (competitionId) => {
     const aggregate = await this.aggregate([
 
       // do a join with the table fixture,  
@@ -90,7 +90,7 @@ ResultSchema.methods.getTable = (competitionId) => {
     return aggregate;
 }
 
-ResultSchema.methods.getTeamResults = (teamId) => {
+ResultSchema.methods.getTeamResults =async (teamId) => {
     const aggregate = await this.aggregate([
   
         // do a join with the table fixture,  
@@ -125,7 +125,7 @@ ResultSchema.methods.getTeamResults = (teamId) => {
 
 
 
-ResultSchema.methods.getTotalscorePerCompetition= (competitionName,date) => {
+ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date) => {
   const aggregate = await this.aggregate([
 
     {
@@ -208,7 +208,7 @@ ResultSchema.methods.getTotalscorePerCompetition= (competitionName,date) => {
   return aggregate;
 }
 
-ResultSchema.methods.getTotalscorePerTeam=(competitionName,date,homeId,awayId) => {
+ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,awayId) => {
   const aggregate = await this.aggregate([
     {
       $match: {

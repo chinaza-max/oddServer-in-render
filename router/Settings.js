@@ -14,9 +14,15 @@ const router=express.Router();
             ODDS
  -----------------------------
  */
+
+
+
+
+ 
 router.post('/changeGoalExpectancy',(req, res)=>{
      
 })
+
 router.post('/changeOdd',(req, res)=>{
      
 })

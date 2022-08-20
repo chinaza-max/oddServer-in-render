@@ -17,7 +17,7 @@ class formatOdd {
       }
       ChangeOdd(Odds, marketType=null) {
         if (marketType) {
-            console.log(Odds,'no')
+         //   console.log(Odds,'no')
           if (Object.keys(Odds[marketType]).length > 2) {
             for (
               let index = 0;
@@ -43,7 +43,7 @@ class formatOdd {
         }
         if (Odds) {
           for (let marketTypes in Odds) {
-            console.log(Object.keys(Odds[marketTypes]));
+            //console.log(Object.keys(Odds[marketTypes]));
             if (Object.keys(Odds[marketTypes]).length > 2) {
               for (
                 let index = 0;
@@ -355,16 +355,5 @@ class odds {
   }
 }
 
-let engine = new odds(1.765, 1.353);
-//init.Setting(66.5, 50.5);
-engine.CalculateOdds();
-
-// console.log(engine.viewTable());
-
-let reduce = new formatOdd();
-//init.Setting(66.5, 50.5);
-// reduce.CalculateOdds();
-
-console.log(reduce.ChangeOdd(engine.viewTable()));
 
 module.exports={odds,formatOdd} ;

@@ -48,4 +48,4 @@ const router2=require('./Router/Post')
 //app.use("/",router1);
 app.use("/",router2);
 
-server.listen(port ,()=>console.log(`server started.... ${port}`))
+server.listen(port,()=>console.log(`server started.... ${port}`))

@@ -4,7 +4,7 @@ const mongoose=require("mongoose");
 
 const OddsSchema= new mongoose.Schema({
     fixtureId:{
-        type: String,
+        type:  mongoose.Schema.Types.ObjectId,
         ref: "fixture",
         required: true
     },

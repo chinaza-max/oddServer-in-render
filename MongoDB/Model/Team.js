@@ -2,19 +2,25 @@ const mongoose=require('mongoose');
 
 
 const teamSchema= new mongoose.Schema({
-    organizationName:{ 
-        type:String,
-        required:true,
-        trim:true
-    }, 
     teamName:{ 
         type:String,
         required:true,
         trim:true
     },
-    teamCreateYear:{
-        type: Date,
-        trim: true,
+    department:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    faculty:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    teamCreatedYear:{
+        type:String,
+        required:true,
+        trim:true
     },
     player:{
     type:[]
