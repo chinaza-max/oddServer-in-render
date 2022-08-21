@@ -28,7 +28,7 @@ class formatOdd {
               if (Odd == "Infinity" || Odd > 40290) {
                 Odd = 40290;
               }
-              Odds[marketType][index]["Odd"] = this.reduceAlgorithmExpon(Odd).toFixed(2);
+              Odds[marketType][index]["Odd"] =Number(this.reduceAlgorithmExpon(Odd).toFixed(2)) ;
             }
             return Odds;
           } else {
@@ -37,7 +37,7 @@ class formatOdd {
             if (Odd == "Infinity" || Odd > 40290) {
               Odd = 40290;
             }
-            Odds[marketType]["Odd"] = this.reduceAlgorithmExpon(Odd).toFixed(2);
+            Odds[marketType]["Odd"] =Number( this.reduceAlgorithmExpon(Odd).toFixed(2));
             return Odds;
           }
         }
@@ -54,7 +54,7 @@ class formatOdd {
                 if (Odd == "Infinity" || Odd > 40290) {
                   Odd = 40290;
                 }
-                Odds[marketTypes][index]["Odd"] = this.reduceAlgorithmExpon(Odd).toFixed(2);
+                Odds[marketTypes][index]["Odd"] =Number(this.reduceAlgorithmExpon(Odd).toFixed(2)) ;
               }
             } else if (marketTypes != null) {
               var Odd = Odds[marketTypes]["Odd"];
@@ -62,7 +62,7 @@ class formatOdd {
               if (Odd == "Infinity" || Odd > 40290) {
                 Odd = 40290;
               }
-              Odds[marketTypes]["Odd"] = this.reduceAlgorithmExpon(Odd).toFixed(2);
+              Odds[marketTypes]["Odd"] =Number(this.reduceAlgorithmExpon(Odd).toFixed(2));
             }
           }
           return Odds;

@@ -4,19 +4,23 @@ const fixtureSchema= new mongoose.Schema({
     competitionId:{
         type:  mongoose.Schema.Types.ObjectId,
         ref: "CompetitionRegistrations",
-        required: true,
+        required: true
     },
     homeTeamId:{
         type: String,
         ref: "teams",
-        required: true,
+        required: true
     },
     awayTeamId:{
         type: String,
         ref: "teams",
-        required: true,
+        required: true
     },
     startTime:{ 
+        type:String,
+        required: true 
+    },
+    startDate:{ 
         type:Date,
         required: true 
     },
@@ -28,7 +32,7 @@ const fixtureSchema= new mongoose.Schema({
     status:{ 
         type:String,
         required:true,
-        enum: ["open", "close", "ongoing","cancelled"],
+        enum: ["open", "close", "ongoing","cancelled"]
     } 
 },
 { timestamp: true });

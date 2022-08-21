@@ -11,7 +11,8 @@ const router=express.Router();
 
 const goalExpentancy=require("../controllers/goalExpentancy");
 const competitionRegistration = require("../controllers/RegisterCompetition");
-const Registerteam = require("../controllers/RegisterTeam");
+const registerTeam = require("../controllers/registerTeam");
+const createFixture=require("../controllers/createFixture")
 /*const axios = require('axios');
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source();*/
@@ -42,11 +43,11 @@ router.post('/RegisterCompetition',competitionRegistration,(req, res)=>{
 })
 
 
-router.post('/RegisterTeam',Registerteam,(req, res)=>{
+router.post('/RegisterTeam',registerTeam,(req, res)=>{
     res.status(200).json({express:{payLoad:"Registerteam created sucessfully ",status:true}})
 })
 
-router.post('/CreateFixture',goalExpentancy,(req, res)=>{
+router.post('/CreateFixture',createFixture,goalExpentancy,(req, res)=>{
     
 })
 
