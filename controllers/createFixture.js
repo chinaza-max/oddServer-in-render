@@ -6,7 +6,7 @@ async function createFixture(req,res,next){
     const fixture=new Fixture()
     
  
-
+/*
     Fixture.deleteMany({teamType:'interSchool'}).then(function(){
         console.log("Data deleted"); // Success
     }).catch(function(error){
@@ -23,7 +23,7 @@ async function createFixture(req,res,next){
         }
         
     })
-
+*/
 
     
     Fixture.find({homeTeamId:req.body.homeTeamId, awayTeamId:req.body.awayTeamId, startTime:req.body.startTime},async (err,data)=>{

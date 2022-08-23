@@ -32,7 +32,8 @@ const fixtureSchema= new mongoose.Schema({
     status:{ 
         type:String,
         required:true,
-        enum: ["open", "close", "ongoing","cancelled"]
+        enum: ["open", "completed", "ongoing","cancelled"],
+        default: "open" 
     } 
 },
 { timestamp: true });

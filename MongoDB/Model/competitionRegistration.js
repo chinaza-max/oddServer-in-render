@@ -5,7 +5,7 @@ const competitionRegistrationSchema = new mongoose.Schema({
     competitionType: {
         type: String,
         required: [true, "competitionType is required"],
-        enum: ["interSchool", "intraSchool"],
+        enum: ["interSchool", "intraSchool"]
     },
     competitionName: {
         type: String,

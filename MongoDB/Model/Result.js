@@ -6,7 +6,8 @@ const ResultSchema= new mongoose.Schema({
         ref: "fixture",
         required: true
     },
-    redCard: {
+    Cards:{
+      redCard: {
         home:{ 
             type: Number, 
             default: 0 
@@ -15,8 +16,8 @@ const ResultSchema= new mongoose.Schema({
             type: Number, 
             default: 0 
         },
-    },
-    yellowCard: {
+      },
+      yellowCard: {
         home:{ 
             type: Number, 
             default: 0 
@@ -24,7 +25,8 @@ const ResultSchema= new mongoose.Schema({
         away:{ 
             type: Number, 
             default: 0 
-        },
+        }
+      },
     },
     scores:{ 
         home:{ 
@@ -42,10 +44,16 @@ const ResultSchema= new mongoose.Schema({
             player:[]
         }, 
     }, 
+    session:{ 
+      type:{ 
+          type: String, 
+          enum: ["1st half", "2nd half","full time"],
+      }
+    }, 
     result:{ 
         type:{ 
             type: String, 
-            enum: ["win", "draw","cancelled"],
+            enum: ["win", "draw","cancelled"]
         },
         team:{ 
             type: String
@@ -150,6 +158,9 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date) =>
       $match: {
         "fixture.createdAt": {
           $gte: ISODate(date)
+        },
+        "fixture.status": {
+          $eq:"completed"
         }
       }
     },

@@ -61,9 +61,7 @@ const calGoalExpectancy =async (req,res,next) => {
         let HomeTeam=toFixed(HomeTeamStrength*AwayTeamDefence*GSHO)
         let AwayTeam=toFixed(AwayTeamStrength*HomeTeamDefence*GSAO)
 
-
-        
-        let engine = new odds(1.765, 1.353);
+        let engine = new odds(HomeTeam,AwayTeam);
         //init.Setting(66.5, 50.5);
         engine.CalculateOdds();
 
@@ -74,12 +72,12 @@ const calGoalExpectancy =async (req,res,next) => {
         // reduce.CalculateOdds();
 
         console.log(reduce.ChangeOdd(engine.viewTable()));
-    /*
-    let engine = new odds(HomeTeam, AwayTeam);
-    engine.CalculateOdds();
-    
+        /*
+        let engine = new odds(HomeTeam, AwayTeam);
+        engine.CalculateOdds();
+        
 
-    let reduce = new formatOdd();
+        let reduce = new formatOdd();
 
         console.log(reduce.ChangeOdd(engine.viewTable()));
         */
@@ -224,9 +222,7 @@ function storeOdd(myOdds,home,away,fixtureId){
             return res.status(500).json({express:{payLoad:"server error",status:false}})
         }
         else{
-            console.log(data)
-            res.status(200).json({express:{payLoad:"Registerteam created sucessfully ",status:true}})
-         //   next()
+            res.status(200).json({express:{payLoad:"fixture sucessfully created ",status:true}})
         }
     })
 }

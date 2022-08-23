@@ -12,7 +12,8 @@ const router=express.Router();
 const goalExpentancy=require("../controllers/goalExpentancy");
 const competitionRegistration = require("../controllers/RegisterCompetition");
 const registerTeam = require("../controllers/registerTeam");
-const createFixture=require("../controllers/createFixture")
+const createFixture=require("../controllers/createFixture");
+const updateResult=require("../controllers/updateResult");
 /*const axios = require('axios');
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source();*/
@@ -55,7 +56,7 @@ router.post('/updateFixture',(req, res)=>{
      
 })
 
-router.post('/updateResult',(req, res)=>{
+router.post('/updateResult',updateResult,(req, res)=>{
      
 })
 module.exports=router;

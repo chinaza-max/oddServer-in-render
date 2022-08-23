@@ -29,7 +29,8 @@ async function Registerteam(req,res,next){
     Team.find({teamName:req.body.teamName,teamCreatedYear:req.body.teamCreatedYear,department:req.body.department,faculty:req.body.faculty},async (err,data)=>{
         if(err){
             console.log("check Registerteam controller ")
-            throw err
+            return res.status(500).json({express:{payLoad:"server error",status:false}})
+
         }
         else{
             console.log(data)
