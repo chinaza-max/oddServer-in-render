@@ -38,6 +38,20 @@ const competitionRegistrationSchema = new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         required: true
     },
+    country: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    level: {
+        type: String, 
+        enum: ["falculty", "departmental","friendly"],
+    },
+    levelName: {
+        type: String,
+        required: true,
+        trim: true
+    },
     status: {
         type: String, 
         enum: ["upcoming", "ongoing","ended"],
@@ -48,3 +62,7 @@ const competitionRegistrationSchema = new mongoose.Schema({
     { timestamp: true });
 
 module.exports = mongoose.model("CompetitionRegistration", competitionRegistrationSchema);
+
+
+
+//levelName eg physical science

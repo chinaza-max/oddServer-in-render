@@ -4,11 +4,13 @@ const {odds,formatOdd} =require("../oddCalculation/oddsGenerator")
 
 const calGoalExpectancy =async (req,res,next) => {
 
-    const {date,homeId,awayId}=req.body
+    const {oddDate,homeId,awayId}=req.body
     const competitionName=res.competitionName
     const fixtureId=res.fixtureId
     const results  = await Result.find();
-    
+
+
+    console.log(results)
     if(results.length==0){
         const home=1.765
         const away= 1.353
@@ -26,8 +28,8 @@ const calGoalExpectancy =async (req,res,next) => {
         
     }
     else{
-        const result1 = await results.getTotalscorePerCompetition(competitionName,date);
-        const result2 = await results.getTotalscorePerTeam(competitionName,date,homeId,awayId);
+        const result1 = await results.getTotalscorePerCompetition(competitionName,oddDate);
+        const result2 = await results.getTotalscorePerTeam(competitionName,oddDate,homeId,awayId);
         
         //Goals Scored at Home Overall
         let GSHO= toFixed(result1.totalHomeGoalScore/result1.totalGamePlayed)

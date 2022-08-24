@@ -133,240 +133,529 @@ ResultSchema.methods.getTeamResults =async (teamId) => {
 
 
 
-ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date) => {
-  const aggregate = await this.aggregate([
-
-    {
-      $match: {
-        "createdAt": {
-          $gte: ISODate(date)
-        }
-      }
-    },
-    {
-      $lookup: {
-        from: "fixture",
-        localField: "fixtureID",
-        foreignField: "id",
-        as: "fixture"
-      }
-    },
-    {
-      $unwind: "$fixture"
-    },
-    {
-      $match: {
-        "fixture.createdAt": {
-          $gte: ISODate(date)
-        },
-        "fixture.status": {
-          $eq:"completed"
-        }
-      }
-    },
-    {
-      $lookup: {
-        from: "competitionRegistration",
-        localField: "fixture.competitionRegistrationId",
-        foreignField: "id",
-        as: "competitionRegistration"
-      }
-    },
-    {
-      $unwind: "$competitionRegistration"
-    },
-    {
-      $match: {
-        $and: [
-          {
-            "competitionRegistration.date": {
-              $gte: ISODate(date)
-            }
-          },
-          {
-            "competitionRegistration.competitionName": {
-              $eq: competitionName
-            }
+ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,competitionType,school,country,levelName) => {
+  
+  if(competitionType=="interSchool"){
+    const aggregate = await this.aggregate([
+      {
+        $match: {
+          "createdAt": {
+            $gte: ISODate(date)
           }
-        ]
-      }
-    },
-    {
-      $group: {
-        _id: null,
-        totalGamePlayed: {
-          $sum: 1
-        },
-        totalHomeGoalScore: {
-          $sum: "$homegoal"
-        },
-        totalAwayGoalScore: {
-          $sum: "$awaygoal"
         }
-      }
-    },
-    {
-      $addFields: {
-        totalGoal: {
-          $add: [
-            "$totalHomeGoal",
-            "$totalAwayGoal"
+      },
+      {
+        $lookup: {
+          from: "fixture",
+          localField: "fixtureID",
+          foreignField: "id",
+          as: "fixture"
+        }
+      },
+      {
+        $unwind: "$fixture"
+      },
+      {
+        $match: {
+          "fixture.createdAt": {
+            $gte: ISODate(date)
+          },
+          "fixture.status": {
+            $eq:"completed"
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: "competitionRegistration",
+          localField: "fixture.competitionRegistrationId",
+          foreignField: "id",
+          as: "competitionRegistration"
+        }
+      },
+      {
+        $unwind: "$competitionRegistration"
+      },
+      {
+        $match: {
+          $and: [
+            {
+              "competitionRegistration.date": {
+                $gte: ISODate(date)
+              }
+            },
+            {
+              "competitionRegistration.competitionName": {
+                $eq: competitionName
+              }
+            },
+            {
+              "competitionRegistration.country": {
+                $eq: country
+              }
+            }
+            
           ]
         }
+      },
+      {
+        $group: {
+          _id: null,
+          totalGamePlayed: {
+            $sum: 1
+          },
+          totalHomeGoalScore: {
+            $sum: "$homegoal"
+          },
+          totalAwayGoalScore: {
+            $sum: "$awaygoal"
+          }
+        }
+      },
+      {
+        $addFields: {
+          totalGoal: {
+            $add: [
+              "$totalHomeGoal",
+              "$totalAwayGoal"
+            ]
+          }
+        }
       }
-    }
-    ]);
-  return aggregate;
-}
+      ]);
+      return aggregate;
+  }
+  else{
 
-ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,awayId) => {
-  const aggregate = await this.aggregate([
-    {
-      $match: {
-        "createdAt": {
-          $gte: ISODate(date)
-        }
-      }
-    },
-    {
-      $lookup: {
-        from: "fixture",
-        localField: "fixtureID",
-        foreignField: "id",
-        as: "fixture"
-      }
-    },
-    {
-      $unwind: "$fixture"
-    },
-    {
-      $match: {
-        "fixture.createdAt": {
-          $gte: ISODate(date)
-        }
-      }
-    },
-    {
-      $lookup: {
-        from: "competitionRegistration",
-        localField: "fixture.competitionRegistrationId",
-        foreignField: "id",
-        as: "competitionRegistration"
-      }
-    },
-    {
-      $unwind: "$competitionRegistration"
-    },
-    {
-      $match: {
-        $and: [
-          {
-            "competitionRegistration.date": {
+      const aggregate = await this.aggregate([
+        {
+          $match: {
+            "createdAt": {
               $gte: ISODate(date)
             }
+          }
+        },
+        {
+          $lookup: {
+            from: "fixture",
+            localField: "fixtureID",
+            foreignField: "id",
+            as: "fixture"
+          }
+        },
+        {
+          $unwind: "$fixture"
+        },
+        {
+          $match: {
+            "fixture.createdAt": {
+              $gte: ISODate(date)
+            },
+            "fixture.status": {
+              $eq:"completed"
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: "competitionRegistration",
+            localField: "fixture.competitionRegistrationId",
+            foreignField: "id",
+            as: "competitionRegistration"
+          }
+        },
+        {
+          $unwind: "$competitionRegistration"
+        },
+        {
+          $match: {
+            $and: [
+              {
+                "competitionRegistration.date": {
+                  $gte: ISODate(date)
+                }
+              },
+              {
+                "competitionRegistration.competitionName": {
+                  $eq: competitionName
+                }
+              }
+              ,
+              {
+                "competitionRegistration.school": {
+                  $eq: school
+                }
+              }
+              ,
+              {
+                "competitionRegistration.levelName": {
+                  $eq: levelName
+                }
+              }
+            ]
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalGamePlayed: {
+              $sum: 1
+            },
+            totalHomeGoalScore: {
+              $sum: "$homegoal"
+            },
+            totalAwayGoalScore: {
+              $sum: "$awaygoal"
+            }
+          }
+        },
+        {
+          $addFields: {
+            totalGoal: {
+              $add: [
+                "$totalHomeGoal",
+                "$totalAwayGoal"
+              ]
+            }
+          }
+        }
+        ]);
+        return aggregate;
+  }
+}
+
+ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,awayId,competitionType,school,country,levelName) => {
+  
+  
+  if(competitionType=="interSchool"){
+    const aggregate = await this.aggregate([
+      {
+        $match: {
+          "createdAt": {
+            $gte: ISODate(date)
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: "fixture",
+          localField: "fixtureID",
+          foreignField: "id",
+          as: "fixture"
+        }
+      },
+      {
+        $unwind: "$fixture"
+      },
+      {
+        $match: {
+          "fixture.createdAt": {
+            $gte: ISODate(date)
           },
-          {
-            "competitionRegistration.competitionName": {
-              $eq: competitionName
+            "fixture.status": {
+              $eq:"completed"
             }
-          }
-        ]
-      }
-    },
-    {
-      $group: {
-        _id: null,
-        homeTeamTotalGoalScore: {
-          $sum: {
-            $cond: {
-              if: {
-                $eq: [
-                  "$fixture.homeId",
-                  homeId
-                ]
-              },
-              then: "$homegoal",
-              else: 0
+        }
+      },
+      {
+        $lookup: {
+          from: "competitionRegistration",
+          localField: "fixture.competitionRegistrationId",
+          foreignField: "id",
+          as: "competitionRegistration"
+        }
+      },
+      {
+        $unwind: "$competitionRegistration"
+      },
+      {
+        $match: {
+          $and: [
+            {
+              "competitionRegistration.date": {
+                $gte: ISODate(date)
+              }
+            },
+            {
+              "competitionRegistration.competitionName": {
+                $eq: competitionName
+              }
+            },
+            {
+              "competitionRegistration.country": {
+                $eq: country
+              }
             }
-          }
-        },
-        homeTeamTotalGoalConceded: {
-          $sum: {
-            $cond: {
-              if: {
-                $eq: [
-                  "$fixture.homeId",
-                  homeId
-                ]
-              },
-              then: "$awaygoal",
-              else: 0
+          ]
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          homeTeamTotalGoalScore: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.homeId",
+                    homeId
+                  ]
+                },
+                then: "$homegoal",
+                else: 0
+              }
             }
-          }
-        },
-        homeTeamTotalGamePlayed: {
-          $sum: {
-            $cond: {
-              if: {
-                $eq: [
-                  "$fixture.homeId",
-                  homeId
-                ]
-              },
-              then: 1,
-              else: 0
+          },
+          homeTeamTotalGoalConceded: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.homeId",
+                    homeId
+                  ]
+                },
+                then: "$awaygoal",
+                else: 0
+              }
             }
-          }
-        },
-        awayTeamTotalGoalScore: {
-          $sum: {
-            $cond: {
-              if: {
-                $eq: [
-                  "$fixture.awayId",
-                  awayId
-                ]
-              },
-              then: "$awaygoal",
-              else: 0
+          },
+          homeTeamTotalGamePlayed: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.homeId",
+                    homeId
+                  ]
+                },
+                then: 1,
+                else: 0
+              }
             }
-          }
-        },
-        awayTeamTotalGoalConceded: {
-          $sum: {
-            $cond: {
-              if: {
-                $eq: [
-                  "$fixture.awayId",
-                  awayId
-                ]
-              },
-              then: "$homegoal",
-              else: 0
+          },
+          awayTeamTotalGoalScore: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.awayId",
+                    awayId
+                  ]
+                },
+                then: "$awaygoal",
+                else: 0
+              }
             }
-          }
-        },
-        awayTeamTotalGamePlayed: {
-          $sum: {
-            $cond: {
-              if: {
-                $eq: [
-                  "$fixture.awayId",
-                  awayId
-                ]
-              },
-              then: 1,
-              else: 0
+          },
+          awayTeamTotalGoalConceded: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.awayId",
+                    awayId
+                  ]
+                },
+                then: "$homegoal",
+                else: 0
+              }
+            }
+          },
+          awayTeamTotalGamePlayed: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.awayId",
+                    awayId
+                  ]
+                },
+                then: 1,
+                else: 0
+              }
             }
           }
         }
       }
-    }
+      ]);
+    return aggregate;
+  }
+  else{
+    const aggregate = await this.aggregate([
+      {
+        $match: {
+          "createdAt": {
+            $gte: ISODate(date)
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: "fixture",
+          localField: "fixtureID",
+          foreignField: "id",
+          as: "fixture"
+        }
+      },
+      {
+        $unwind: "$fixture"
+      },
+      {
+        $match: {
+          "fixture.createdAt": {
+            $gte: ISODate(date)
+          },
+          "fixture.status": {
+            $eq:"completed"
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: "competitionRegistration",
+          localField: "fixture.competitionRegistrationId",
+          foreignField: "id",
+          as: "competitionRegistration"
+        }
+      },
+      {
+        $unwind: "$competitionRegistration"
+      },
+      {
+        $match: {
+          $and: [
+            {
+              "competitionRegistration.date": {
+                $gte: ISODate(date)
+              }
+            },
+            {
+              "competitionRegistration.competitionName": {
+                $eq: competitionName
+              }
+            },
+            {
+              "competitionRegistration.school": {
+                $eq: school
+              }
+            }
+            ,
+              {
+                "competitionRegistration.levelName": {
+                  $eq: levelName
+                }
+              }
+          ]
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          homeTeamTotalGoalScore: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.homeId",
+                    homeId
+                  ]
+                },
+                then: "$homegoal",
+                else: 0
+              }
+            }
+          },
+          homeTeamTotalGoalConceded: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.homeId",
+                    homeId
+                  ]
+                },
+                then: "$awaygoal",
+                else: 0
+              }
+            }
+          },
+          homeTeamTotalGamePlayed: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.homeId",
+                    homeId
+                  ]
+                },
+                then: 1,
+                else: 0
+              }
+            }
+          },
+          awayTeamTotalGoalScore: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.awayId",
+                    awayId
+                  ]
+                },
+                then: "$awaygoal",
+                else: 0
+              }
+            }
+          },
+          awayTeamTotalGoalConceded: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.awayId",
+                    awayId
+                  ]
+                },
+                then: "$homegoal",
+                else: 0
+              }
+            }
+          },
+          awayTeamTotalGamePlayed: {
+            $sum: {
+              $cond: {
+                if: {
+                  $eq: [
+                    "$fixture.awayId",
+                    awayId
+                  ]
+                },
+                then: 1,
+                else: 0
+              }
+            }
+          }
+        }
+      }
     ]);
-  return aggregate;
+    return aggregate;
+
+  }
+ 
 }
 
 
 
 
 module.exports=mongoose.model("resultS",ResultSchema);
+
+
+
+
+/*
+
+* competion name should be unique for inter competition
+
+
+*/

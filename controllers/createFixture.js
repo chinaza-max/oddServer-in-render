@@ -26,7 +26,7 @@ async function createFixture(req,res,next){
 */
 
     
-    Fixture.find({homeTeamId:req.body.homeTeamId, awayTeamId:req.body.awayTeamId, startTime:req.body.startTime},async (err,data)=>{
+    Fixture.find({homeTeamId:req.body.homeTeamId, awayTeamId:req.body.awayTeamId, startDate:req.body.startDate},async (err,data)=>{
         if(err){
             console.log("check CreateFixture controller ")
             throw err
@@ -74,7 +74,7 @@ async function createFixture(req,res,next){
                 })
             }
             else{
-                res.status(403).json({express:{payLoad:"team already exit",status:true}})
+                res.status(403).json({express:{payLoad:"fixture already exit",status:true}})
             }
         }
     })
