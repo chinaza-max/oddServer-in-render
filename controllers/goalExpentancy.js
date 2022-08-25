@@ -8,9 +8,11 @@ const calGoalExpectancy =async (req,res,next) => {
     const competitionName=res.competitionName
     const fixtureId=res.fixtureId
     const results  = await Result.find();
+    const accessResultAggregate  = new  Result();
 
 
-    console.log(results)
+    //console.log(test.getTotalscorePerCompetition())
+    //console.log(Result)
     if(results.length==0){
         const home=1.765
         const away= 1.353
@@ -28,9 +30,13 @@ const calGoalExpectancy =async (req,res,next) => {
         
     }
     else{
-        const result1 = await results.getTotalscorePerCompetition(competitionName,oddDate);
-        const result2 = await results.getTotalscorePerTeam(competitionName,oddDate,homeId,awayId);
+
+
+        const result1 = await accessResultAggregate.getTotalscorePerCompetition(competitionName,oddDate);
+        const result2 = await accessResultAggregate.getTotalscorePerTeam(competitionName,oddDate,homeId,awayId);
         
+        console.log(result1)
+        console.log(result2)
         //Goals Scored at Home Overall
         let GSHO= toFixed(result1.totalHomeGoalScore/result1.totalGamePlayed)
 

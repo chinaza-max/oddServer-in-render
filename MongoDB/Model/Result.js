@@ -132,7 +132,7 @@ ResultSchema.methods.getTeamResults =async (teamId) => {
 }
 
 
-
+//const Result  = new  ResultSchema();
 ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,competitionType,school,country,levelName) => {
   
   if(competitionType=="interSchool"){
@@ -140,7 +140,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
       {
         $match: {
           "createdAt": {
-            $gte: ISODate(date)
+            $gte: new Date(date)
           }
         }
       },
@@ -158,7 +158,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
       {
         $match: {
           "fixture.createdAt": {
-            $gte: ISODate(date)
+            $gte: new Date(date)
           },
           "fixture.status": {
             $eq:"completed"
@@ -181,7 +181,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
           $and: [
             {
               "competitionRegistration.date": {
-                $gte: ISODate(date)
+                $gte: new Date(date)
               }
             },
             {
@@ -226,12 +226,11 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
       return aggregate;
   }
   else{
-
-      const aggregate = await this.aggregate([
+      const aggregate = await mongoose.ResultSchema.aggregate([
         {
           $match: {
             "createdAt": {
-              $gte: ISODate(date)
+              $gte: new Date(date)
             }
           }
         },
@@ -249,7 +248,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
         {
           $match: {
             "fixture.createdAt": {
-              $gte: ISODate(date)
+              $gte: new Date(date)
             },
             "fixture.status": {
               $eq:"completed"
@@ -272,7 +271,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
             $and: [
               {
                 "competitionRegistration.date": {
-                  $gte: ISODate(date)
+                  $gte: new Date(date)
                 }
               },
               {
@@ -332,7 +331,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
       {
         $match: {
           "createdAt": {
-            $gte: ISODate(date)
+            $gte: new Date(date)
           }
         }
       },
@@ -350,7 +349,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
       {
         $match: {
           "fixture.createdAt": {
-            $gte: ISODate(date)
+            $gte: new Date(date)
           },
             "fixture.status": {
               $eq:"completed"
@@ -373,7 +372,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
           $and: [
             {
               "competitionRegistration.date": {
-                $gte: ISODate(date)
+                $gte: new Date(date)
               }
             },
             {
@@ -486,7 +485,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
       {
         $match: {
           "createdAt": {
-            $gte: ISODate(date)
+            $gte: new Date(date)
           }
         }
       },
@@ -504,7 +503,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
       {
         $match: {
           "fixture.createdAt": {
-            $gte: ISODate(date)
+            $gte: new Date(date)
           },
           "fixture.status": {
             $eq:"completed"
@@ -527,7 +526,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
           $and: [
             {
               "competitionRegistration.date": {
-                $gte: ISODate(date)
+                $gte: new Date(date)
               }
             },
             {

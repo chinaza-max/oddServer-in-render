@@ -45,12 +45,11 @@ const competitionRegistrationSchema = new mongoose.Schema({
     },
     level: {
         type: String, 
-        enum: ["falculty", "departmental","friendly"],
+        enum: ["falculty", "department","friendly"]
     },
     levelName: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     status: {
         type: String, 

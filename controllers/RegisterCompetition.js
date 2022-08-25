@@ -44,6 +44,9 @@ async function RegisterCompetition(req,res,next){
                 competition.hostName=myData.hostName
                 competition.school=myData.school
                 competition.location=myData.location
+                competition.level=myData.level
+                competition.levelName=myData.levelName
+                competition.country=myData.country
                 competition.save(async function(err,data){
                     if(err){
                         console.log("check  RegisterCompetitioncontroller")
