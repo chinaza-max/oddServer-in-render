@@ -132,7 +132,6 @@ ResultSchema.methods.getTeamResults =async (teamId) => {
 }
 
 
-//const Result  = new  ResultSchema();
 ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,competitionType,school,country,levelName) => {
   
   if(competitionType=="interSchool"){
