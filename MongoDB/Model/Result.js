@@ -63,7 +63,7 @@ const ResultSchema= new mongoose.Schema({
 { timestamp: true });
 
 ResultSchema.methods.getTable =async (competitionId) => {
-    const aggregate = await this.aggregate([
+    const aggregate = await this.model("resultS").aggregate([
 
       // do a join with the table fixture,  
       {
@@ -98,9 +98,9 @@ ResultSchema.methods.getTable =async (competitionId) => {
     return aggregate;
 }
 
-ResultSchema.methods.getTeamResults =async (teamId) => {
-    const aggregate = await this.aggregate([
-  
+ResultSchema.methods.getTeamResults =async function getTeamResults (teamId) {
+    const aggregate = await this.model("resultS").aggregate([
+
         // do a join with the table fixture,  
         {
           $lookup: {
@@ -128,14 +128,15 @@ ResultSchema.methods.getTeamResults =async (teamId) => {
             {$or:[{"fixture.homeTeamId": teamId},{"fixture.awayTeamId":teamId}]  } 
          },
       ]);
+      console.log(aggregate)
     return aggregate;
 }
 
 
-ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,competitionType,school,country,levelName) => {
+ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePerCompetition (competitionName,date,competitionType,school,country,levelName){
   
   if(competitionType=="interSchool"){
-    const aggregate = await this.aggregate([
+    const aggregate = await this.model("resultS").aggregate([
       {
         $match: {
           "createdAt": {
@@ -146,7 +147,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
       {
         $lookup: {
           from: "fixture",
-          localField: "fixtureID",
+          localField: "fixtureId",
           foreignField: "id",
           as: "fixture"
         }
@@ -166,30 +167,30 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
       },
       {
         $lookup: {
-          from: "competitionRegistration",
-          localField: "fixture.competitionRegistrationId",
+          from: "CompetitionRegistration",
+          localField: "fixture.competitionId",
           foreignField: "id",
-          as: "competitionRegistration"
+          as: "CompetitionRegistration"
         }
       },
       {
-        $unwind: "$competitionRegistration"
+        $unwind: "$CompetitionRegistration"
       },
       {
         $match: {
           $and: [
             {
-              "competitionRegistration.date": {
+              "CompetitionRegistration.startDate": {
                 $gte: new Date(date)
               }
             },
             {
-              "competitionRegistration.competitionName": {
+              "CompetitionRegistration.competitionName": {
                 $eq: competitionName
               }
             },
             {
-              "competitionRegistration.country": {
+              "CompetitionRegistration.country": {
                 $eq: country
               }
             }
@@ -204,10 +205,10 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
             $sum: 1
           },
           totalHomeGoalScore: {
-            $sum: "$homegoal"
+            $sum: "$scores.home.goal"
           },
           totalAwayGoalScore: {
-            $sum: "$awaygoal"
+            $sum: "$scores.away.goal"
           }
         }
       },
@@ -225,7 +226,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
       return aggregate;
   }
   else{
-      const aggregate = await mongoose.ResultSchema.aggregate([
+      const aggregate = await this.model("resultS").aggregate([
         {
           $match: {
             "createdAt": {
@@ -236,7 +237,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
         {
           $lookup: {
             from: "fixture",
-            localField: "fixtureID",
+            localField: "fixtureId",
             foreignField: "id",
             as: "fixture"
           }
@@ -256,37 +257,37 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
         },
         {
           $lookup: {
-            from: "competitionRegistration",
-            localField: "fixture.competitionRegistrationId",
+            from: "CompetitionRegistration",
+            localField: "fixture.competitionId",
             foreignField: "id",
-            as: "competitionRegistration"
+            as: "CompetitionRegistration"
           }
         },
         {
-          $unwind: "$competitionRegistration"
+          $unwind: "$CompetitionRegistration"
         },
         {
           $match: {
             $and: [
               {
-                "competitionRegistration.date": {
+                "CompetitionRegistration.startDate": {
                   $gte: new Date(date)
                 }
               },
               {
-                "competitionRegistration.competitionName": {
+                "CompetitionRegistration.competitionName": {
                   $eq: competitionName
                 }
               }
               ,
               {
-                "competitionRegistration.school": {
+                "CompetitionRegistration.school": {
                   $eq: school
                 }
               }
               ,
               {
-                "competitionRegistration.levelName": {
+                "CompetitionRegistration.levelName": {
                   $eq: levelName
                 }
               }
@@ -300,10 +301,10 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
               $sum: 1
             },
             totalHomeGoalScore: {
-              $sum: "$homegoal"
+              $sum: "$scores.home.goal"
             },
             totalAwayGoalScore: {
-              $sum: "$awaygoal"
+              $sum: "$scores.away.goal"
             }
           }
         },
@@ -311,8 +312,8 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
           $addFields: {
             totalGoal: {
               $add: [
-                "$totalHomeGoal",
-                "$totalAwayGoal"
+                "$totalHomeGoalScore",
+                "$totalAwayGoalScore"
               ]
             }
           }
@@ -322,11 +323,11 @@ ResultSchema.methods.getTotalscorePerCompetition=async (competitionName,date,com
   }
 }
 
-ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,awayId,competitionType,school,country,levelName) => {
+ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,homeId,awayId,competitionType,school,country,levelName){
   
   
   if(competitionType=="interSchool"){
-    const aggregate = await this.aggregate([
+    const aggregate = await this.model("resultS").aggregate([
       {
         $match: {
           "createdAt": {
@@ -337,7 +338,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
       {
         $lookup: {
           from: "fixture",
-          localField: "fixtureID",
+          localField: "fixtureId",
           foreignField: "id",
           as: "fixture"
         }
@@ -357,30 +358,30 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
       },
       {
         $lookup: {
-          from: "competitionRegistration",
-          localField: "fixture.competitionRegistrationId",
+          from: "CompetitionRegistration",
+          localField: "fixture.competitionId",
           foreignField: "id",
-          as: "competitionRegistration"
+          as: "CompetitionRegistration"
         }
       },
       {
-        $unwind: "$competitionRegistration"
+        $unwind: "$CompetitionRegistration"
       },
       {
         $match: {
           $and: [
             {
-              "competitionRegistration.date": {
+              "CompetitionRegistration.startDate": {
                 $gte: new Date(date)
               }
             },
             {
-              "competitionRegistration.competitionName": {
+              "CompetitionRegistration.competitionName": {
                 $eq: competitionName
               }
             },
             {
-              "competitionRegistration.country": {
+              "CompetitionRegistration.country": {
                 $eq: country
               }
             }
@@ -395,11 +396,11 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.homeId",
+                    "$fixture.homeTeamId",
                     homeId
                   ]
                 },
-                then: "$homegoal",
+                then: "$scores.home.goal",
                 else: 0
               }
             }
@@ -409,11 +410,11 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.homeId",
+                    "$fixture.homeTeamId",
                     homeId
                   ]
                 },
-                then: "$awaygoal",
+                then: "$scores.away.goal",
                 else: 0
               }
             }
@@ -423,7 +424,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.homeId",
+                    "$fixture.homeTeamId",
                     homeId
                   ]
                 },
@@ -437,11 +438,11 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.awayId",
+                    "$fixture.awayTeamId",
                     awayId
                   ]
                 },
-                then: "$awaygoal",
+                then: "$scores.away.goal",
                 else: 0
               }
             }
@@ -451,11 +452,11 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.awayId",
+                    "$fixture.awayTeamId",
                     awayId
                   ]
                 },
-                then: "$homegoal",
+                then: "$scores.home.goal",
                 else: 0
               }
             }
@@ -465,7 +466,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.awayId",
+                    "$fixture.awayTeamId",
                     awayId
                   ]
                 },
@@ -480,7 +481,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
     return aggregate;
   }
   else{
-    const aggregate = await this.aggregate([
+    const aggregate = await this.model("resultS").aggregate([
       {
         $match: {
           "createdAt": {
@@ -491,7 +492,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
       {
         $lookup: {
           from: "fixture",
-          localField: "fixtureID",
+          localField: "fixtureId",
           foreignField: "id",
           as: "fixture"
         }
@@ -511,36 +512,36 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
       },
       {
         $lookup: {
-          from: "competitionRegistration",
-          localField: "fixture.competitionRegistrationId",
+          from: "CompetitionRegistration",
+          localField: "fixture.competitionId",
           foreignField: "id",
-          as: "competitionRegistration"
+          as: "CompetitionRegistration"
         }
       },
       {
-        $unwind: "$competitionRegistration"
+        $unwind: "$CompetitionRegistration"
       },
       {
         $match: {
           $and: [
             {
-              "competitionRegistration.date": {
+              "CompetitionRegistration.startDate": {
                 $gte: new Date(date)
               }
             },
             {
-              "competitionRegistration.competitionName": {
+              "CompetitionRegistration.competitionName": {
                 $eq: competitionName
               }
             },
             {
-              "competitionRegistration.school": {
+              "CompetitionRegistration.school": {
                 $eq: school
               }
             }
             ,
               {
-                "competitionRegistration.levelName": {
+                "CompetitionRegistration.levelName": {
                   $eq: levelName
                 }
               }
@@ -555,11 +556,11 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.homeId",
+                    "$fixture.homeTeamId",
                     homeId
                   ]
                 },
-                then: "$homegoal",
+                then: "$scores.home.goal",
                 else: 0
               }
             }
@@ -569,11 +570,11 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.homeId",
+                    "$fixture.homeTeamId",
                     homeId
                   ]
                 },
-                then: "$awaygoal",
+                then: "$scores.away.goal",
                 else: 0
               }
             }
@@ -583,7 +584,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.homeId",
+                    "$fixture.homeTeamId",
                     homeId
                   ]
                 },
@@ -597,11 +598,11 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.awayId",
+                    "$fixture.awayTeamId",
                     awayId
                   ]
                 },
-                then: "$awaygoal",
+                then: "$scores.away.goal",
                 else: 0
               }
             }
@@ -611,11 +612,11 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.awayId",
+                    "$fixture.awayTeamId",
                     awayId
                   ]
                 },
-                then: "$homegoal",
+                then: "$scores.home.goal",
                 else: 0
               }
             }
@@ -625,7 +626,7 @@ ResultSchema.methods.getTotalscorePerTeam=async(competitionName,date,homeId,away
               $cond: {
                 if: {
                   $eq: [
-                    "$fixture.awayId",
+                    "$fixture.awayTeamId",
                     awayId
                   ]
                 },

@@ -4,15 +4,28 @@ const {odds,formatOdd} =require("../oddCalculation/oddsGenerator")
 
 const calGoalExpectancy =async (req,res,next) => {
 
-    const {oddDate,homeId,awayId}=req.body
-    const competitionName=res.competitionName
-    const fixtureId=res.fixtureId
-    const results  = await Result.find();
-    const accessResultAggregate  = new  Result();
-
-
+    const {oddDate,homeTeamId,awayTeamId}=req.body
+    const competitionName=res.competitionName;
+    const competitionType=res.competitionType;
+    const school=res.school;
+    const country=res.country;
+    const levelName=res.levelName;
+    const fixtureId=res.fixtureId;
+    const results  = await Result();
+    //console.log(homeTeamId,awayTeamId)
+    console.log(oddDate,homeTeamId,awayTeamId,competitionName,competitionType,school,country,levelName)
+    Result.find({},(eer,data)=>{
+       // console.log(data)
+        if(data){
+          //  console.log(data)
+            //res.json({express:data})
+       //     data.getTeamResults("ee")
+        }
+    })
+    
     //console.log(test.getTotalscorePerCompetition())
-    //console.log(Result)
+    //console.log(results)
+
     if(results.length==0){
         const home=1.765
         const away= 1.353
@@ -30,75 +43,95 @@ const calGoalExpectancy =async (req,res,next) => {
         
     }
     else{
-
-
-        const result1 = await accessResultAggregate.getTotalscorePerCompetition(competitionName,oddDate);
-        const result2 = await accessResultAggregate.getTotalscorePerTeam(competitionName,oddDate,homeId,awayId);
         
+        const result1 = await results.getTotalscorePerCompetition(competitionName,oddDate,competitionType,school,country,levelName);
+        const result2 = await results.getTotalscorePerTeam(competitionName,oddDate,homeTeamId,awayTeamId,competitionType,school,country,levelName);
+        
+        console.log("result2")
         console.log(result1)
         console.log(result2)
-        //Goals Scored at Home Overall
-        let GSHO= toFixed(result1.totalHomeGoalScore/result1.totalGamePlayed)
-
-        //Goals Scored Away Overall
-        let GSAO= toFixed(result1.totalAwayGoalScore/result1.totalGamePlayed)
-
-
-        //Team Home Goal Average For
-        let THGA=toFixed(result2.homeTeamTotalGoalScore/result2.homeTeamTotalGamePlayed)
-
-        //Team Home Goal Average Against
-        let THGAA=toFixed(result2.homeTeamTotalGoalConceded/result2.homeTeamTotalGamePlayed)
-
-
-        //Team Away Goal Average For
-        let TAGA=toFixed(result2.awayTeamTotalGoalScore/result2.awayTeamTotalGamePlayed)
-
-        //Team Away Goal Average Against
-        let TAGAA=toFixed(result2.awayTeamTotalGoalConceded/result2.awayTeamTotalGamePlayed)
-
-        //Team’s Attack Strength
-        let HomeTeamStrength=toFixed(THGA/GSHO)
-        let AwayTeamStrength=toFixed(TAGA/GSAO)
-
-        //Team’s Defence Strength
-        let HomeTeamDefence=toFixed(THGAA/GSAO)
-        let AwayTeamDefence=toFixed(TAGAA/GSHO)
-
-        //Calculate Goal Expectancy
-        let HomeTeam=toFixed(HomeTeamStrength*AwayTeamDefence*GSHO)
-        let AwayTeam=toFixed(AwayTeamStrength*HomeTeamDefence*GSAO)
-
-        let engine = new odds(HomeTeam,AwayTeam);
-        //init.Setting(66.5, 50.5);
+        console.log("result2")
+       if(result1.length==0||result2.length==0){
+        const home=1.765
+        const away= 1.353
+        const engine = new odds(home,away);
+   
+        //method calculate odda
         engine.CalculateOdds();
-
         // console.log(engine.viewTable());
 
-        let reduce = new formatOdd();
-        //init.Setting(66.5, 50.5);
-        // reduce.CalculateOdds();
-
-        console.log(reduce.ChangeOdd(engine.viewTable()));
-        /*
-        let engine = new odds(HomeTeam, AwayTeam);
-        engine.CalculateOdds();
+        //class instance reduce the calculated odds
+        const reduce = new formatOdd();
+        let myOdds=reduce.ChangeOdd(engine.viewTable())
         
+        storeOdd(myOdds,home,away,fixtureId)
+       }
+       else{
+         //Goals Scored at Home Overall
+         let GSHO= toFixed(result1.totalHomeGoalScore/result1.totalGamePlayed)
 
-        let reduce = new formatOdd();
-
-        console.log(reduce.ChangeOdd(engine.viewTable()));
-        */
-    }
+         //Goals Scored Away Overall
+         let GSAO= toFixed(result1.totalAwayGoalScore/result1.totalGamePlayed)
+ 
+ 
+         //Team Home Goal Average For
+         let THGA=toFixed(result2.homeTeamTotalGoalScore/result2.homeTeamTotalGamePlayed)
+ 
+         //Team Home Goal Average Against
+         let THGAA=toFixed(result2.homeTeamTotalGoalConceded/result2.homeTeamTotalGamePlayed)
+ 
+ 
+         //Team Away Goal Average For
+         let TAGA=toFixed(result2.awayTeamTotalGoalScore/result2.awayTeamTotalGamePlayed)
+ 
+         //Team Away Goal Average Against
+         let TAGAA=toFixed(result2.awayTeamTotalGoalConceded/result2.awayTeamTotalGamePlayed)
+ 
+         //Team’s Attack Strength
+         let HomeTeamStrength=toFixed(THGA/GSHO)
+         let AwayTeamStrength=toFixed(TAGA/GSAO)
+ 
+         //Team’s Defence Strength
+         let HomeTeamDefence=toFixed(THGAA/GSAO)
+         let AwayTeamDefence=toFixed(TAGAA/GSHO)
+ 
+         //Calculate Goal Expectancy
+         let HomeTeam=toFixed(HomeTeamStrength*AwayTeamDefence*GSHO)
+         let AwayTeam=toFixed(AwayTeamStrength*HomeTeamDefence*GSAO)
+ 
+         let engine = new odds(HomeTeam,AwayTeam);
+         //init.Setting(66.5, 50.5);
+         engine.CalculateOdds();
+ 
+         // console.log(engine.viewTable());
+ 
+         let reduce = new formatOdd();
+         //init.Setting(66.5, 50.5);
+         // reduce.CalculateOdds();
+ 
+         console.log(reduce.ChangeOdd(engine.viewTable()));
+         /*
+         let engine = new odds(HomeTeam, AwayTeam);
+         engine.CalculateOdds();
+         
+ 
+         let reduce = new formatOdd();
+ 
+         console.log(reduce.ChangeOdd(engine.viewTable()));
+         */
+       }
+   }
 
 
     
 function storeOdd(myOdds,home,away,fixtureId){
+    /*
     console.log("-----------------------------------------------")
     console.log("-----------------------------------------------")
     console.log("-----------------------------------------------")
     console.log("-----------------------------------------------")
     console.log(fixtureId)
+    */
     const fixtureOdds=new FixtureOdds()
 
     fixtureOdds.fixtureId=fixtureId
@@ -240,3 +273,4 @@ function storeOdd(myOdds,home,away,fixtureId){
 
 module.exports = calGoalExpectancy;
 
+//https://stackoverflow.com/questions/40636434/aggregate-returns-empty-array-mongoose

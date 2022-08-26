@@ -19,7 +19,7 @@ async function createFixture(req,res,next){
 
         }
         else{
-            console.log(data)
+           console.log(data)
         }
         
     })
@@ -33,7 +33,6 @@ async function createFixture(req,res,next){
         }
         else{
         
-            
             if(data.length==0){
                 let myData=req.body
 
@@ -64,9 +63,13 @@ async function createFixture(req,res,next){
                                     return res.status(200).json({express:{payLoad:"no competition use found",status:true}})
                                 }
                                 else{
-                                    console.log(data2)
+                                    //console.log(data2)
                                     res.fixtureId=data1._id
                                     res.competitionName=data2.competitionName
+                                    res.competitionType=data2.competitionType
+                                    res.school=data2.school
+                                    res.country=data2.country
+                                    res.levelName=data2.levelName
                                     next()
                                 }
                             }
@@ -77,6 +80,7 @@ async function createFixture(req,res,next){
                 })
             }
             else{
+                console.log(data)
                 res.status(403).json({express:{payLoad:"fixture already exit",status:true}})
             }
         }
