@@ -1,17 +1,17 @@
 const Result =require("../MongoDB/Model/Result");
-
-
+const mongoose=require('mongoose')
+const ToId=mongoose.Types.ObjectId
 
 async function updateResult(req,res,next){
     const result=new Result()
     
 /*
-    Result.deleteMany({resultType:'interSchool'}).then(function(){
+    Result.deleteMany({"result.type":'win'}).then(function(){
         console.log("Data deleted"); // Success
     }).catch(function(error){
         console.log(error); // Failure
     });
-   
+   */
     Result.find(async (err,data)=>{
         if(err){
             console.log("check updateResult controller ")
@@ -22,7 +22,7 @@ async function updateResult(req,res,next){
         }
         
     })
-    */
+
 
     
     Result.find({fixtureId:req.body.fixtureId},async (err,data)=>{
@@ -32,11 +32,11 @@ async function updateResult(req,res,next){
         }
         else{
             console.log(data)
-            
+        
             if(data.length==0){
                 const myData=req.body
-                console.log(myData.result)
-                result.fixtureId=myData.fixtureId
+                //console.log(myData.result)
+                result.fixtureId=ToId(myData.fixtureId)
                 result.scores.home.goal=myData.homeScore
                 result.scores.away.goal=myData.awayScore
                 result.Cards.redCard.home=myData.redCardHome
@@ -51,7 +51,7 @@ async function updateResult(req,res,next){
                         return res.status(500).json({express:{payLoad:"server error",status:false}})
                     }
                     else{
-                        console.log(data)
+                      //  console.log(data)
                         return res.status(200).json({express:{payLoad:data,status:true}})
                     }
                 })

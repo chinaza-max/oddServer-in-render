@@ -60,7 +60,7 @@ const ResultSchema= new mongoose.Schema({
         }, 
     }
 },
-{ timestamp: true });
+{ timestamps: true });
 
 ResultSchema.methods.getTable =async (competitionId) => {
     const aggregate = await this.model("resultS").aggregate([
@@ -131,8 +131,7 @@ ResultSchema.methods.getTeamResults =async function getTeamResults (teamId) {
       console.log(aggregate)
     return aggregate;
 }
-
-
+let idToSearch = mongoose.Types.ObjectId("630b7536775debd0e468e95e")
 ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePerCompetition (competitionName,date,competitionType,school,country,levelName){
   
   if(competitionType=="interSchool"){
@@ -226,100 +225,50 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
       return aggregate;
   }
   else{
-      const aggregate = await this.model("resultS").aggregate([
-        {
-          $match: {
-            "createdAt": {
-              $gte: new Date(date)
-            }
-          }
-        },
-        {
-          $lookup: {
-            from: "fixture",
-            localField: "fixtureId",
-            foreignField: "id",
-            as: "fixture"
-          }
-        },
-        {
-          $unwind: "$fixture"
-        },
-        {
-          $match: {
-            "fixture.createdAt": {
-              $gte: new Date(date)
-            },
-            "fixture.status": {
-              $eq:"completed"
-            }
-          }
-        },
-        {
-          $lookup: {
-            from: "CompetitionRegistration",
-            localField: "fixture.competitionId",
-            foreignField: "id",
-            as: "CompetitionRegistration"
-          }
-        },
-        {
-          $unwind: "$CompetitionRegistration"
-        },
-        {
-          $match: {
-            $and: [
-              {
-                "CompetitionRegistration.startDate": {
-                  $gte: new Date(date)
-                }
-              },
-              {
-                "CompetitionRegistration.competitionName": {
-                  $eq: competitionName
-                }
-              }
-              ,
-              {
-                "CompetitionRegistration.school": {
-                  $eq: school
-                }
-              }
-              ,
-              {
-                "CompetitionRegistration.levelName": {
-                  $eq: levelName
-                }
-              }
-            ]
-          }
-        },
-        {
-          $group: {
-            _id: null,
-            totalGamePlayed: {
-              $sum: 1
-            },
-            totalHomeGoalScore: {
-              $sum: "$scores.home.goal"
-            },
-            totalAwayGoalScore: {
-              $sum: "$scores.away.goal"
-            }
-          }
-        },
-        {
-          $addFields: {
-            totalGoal: {
-              $add: [
-                "$totalHomeGoalScore",
-                "$totalAwayGoalScore"
-              ]
-            }
+  
+      this.model("resultS").aggregate([
+      {
+        $match: {
+          "createdAt": {
+            $gte: new Date(date)
           }
         }
-        ]);
-        return aggregate;
+      },
+      {
+        $lookup: {
+            from: "fixtures",
+            let: { "myFixtureId": "$fixtureId" },
+            pipeline: [
+                {
+                    $match: {
+                        $expr: { $eq: ["$_id", "$$myFixtureId"] }
+                    }
+                },
+                {
+                  $lookup: {
+                    from: "CompetitionRegistrations",
+                    let: { "myFixtureId": "$fixtureId" },
+                    pipeline: [
+                        {
+                          $match: {
+                              $expr: { $eq: [1, 1] }
+                          }
+                        },
+                    ],
+                    as: "CompetitionRegistrations"
+                }
+                 
+                },
+            ],
+            as: "fixture"
+        }
+    }
+      ]).then((data)=>{
+        console.log("-------------data--------")
+        console.log("-------------data--------")
+       console.log(data[1])
+      });
+      
   }
 }
 
@@ -658,3 +607,105 @@ module.exports=mongoose.model("resultS",ResultSchema);
 
 
 */
+
+
+/*
+      const aggregate = await this.model("resultS").aggregate([
+        {
+          $match: {
+            "createdAt": {
+              $gte: new Date(date)
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: "fixture",
+            localField: "fixtureId",
+            foreignField: "id",
+            as: "fixture"
+          }
+        },
+        {
+          $unwind: "$fixture"
+        },
+        {
+          $match: {
+            "fixture.createdAt": {
+              $gte: new Date(date)
+            },
+            "fixture.status": {
+              $eq:"completed"
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: "CompetitionRegistration",
+            localField: "fixture.competitionId",
+            foreignField: "id",
+            as: "CompetitionRegistration"
+          }
+        },
+        {
+          $unwind: "$CompetitionRegistration"
+        },
+        {
+          $match: {
+            $and: [
+              {
+                "CompetitionRegistration.startDate": {
+                  $gte: new Date(date)
+                }
+              },
+              {
+                "CompetitionRegistration.competitionName": {
+                  $eq: competitionName
+                }
+              }
+              ,
+              {
+                "CompetitionRegistration.school": {
+                  $eq: school
+                }
+              }
+              ,
+              {
+                "CompetitionRegistration.levelName": {
+                  $eq: levelName
+                }
+              }
+            ]
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalGamePlayed: {
+              $sum: 1
+            },
+            totalHomeGoalScore: {
+              $sum: "$scores.home.goal"
+            },
+            totalAwayGoalScore: {
+              $sum: "$scores.away.goal"
+            }
+          }
+        },
+        {
+          $addFields: {
+            totalGoal: {
+              $add: [
+                "$totalHomeGoalScore",
+                "$totalAwayGoalScore"
+              ]
+            }
+          }
+        }
+        ]).then((data)=>{
+          console.log("-------------data--------")
+          console.log("-------------data--------")
+         console.log(data)
+        });
+        return aggregate;
+        */

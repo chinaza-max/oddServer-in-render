@@ -532,6 +532,6 @@ const OddsSchema= new mongoose.Schema({
         }
     }
 },
-{ timestamp: true });
+{ timestamps: true });
 
 module.exports=mongoose.model("odd",OddsSchema);

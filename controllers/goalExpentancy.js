@@ -15,17 +15,16 @@ const calGoalExpectancy =async (req,res,next) => {
     //console.log(homeTeamId,awayTeamId)
     console.log(oddDate,homeTeamId,awayTeamId,competitionName,competitionType,school,country,levelName)
     Result.find({},(eer,data)=>{
-       // console.log(data)
+        //console.log(data)
         if(data){
-          //  console.log(data)
+            //console.log("result     :",data)
             //res.json({express:data})
-       //     data.getTeamResults("ee")
+            //data.getTeamResults("ee")
         }
     })
     
     //console.log(test.getTotalscorePerCompetition())
     //console.log(results)
-
     if(results.length==0){
         const home=1.765
         const away= 1.353
@@ -46,7 +45,7 @@ const calGoalExpectancy =async (req,res,next) => {
         
         const result1 = await results.getTotalscorePerCompetition(competitionName,oddDate,competitionType,school,country,levelName);
         const result2 = await results.getTotalscorePerTeam(competitionName,oddDate,homeTeamId,awayTeamId,competitionType,school,country,levelName);
-        
+        return
         console.log("result2")
         console.log(result1)
         console.log(result2)

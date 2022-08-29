@@ -1,16 +1,18 @@
 const Fixture =require("../MongoDB/Model/Fixture");
 const CompetitionRegistration=require("../MongoDB/Model/competitionRegistration")
-
+const mongoose=require('mongoose')
+const ToId=mongoose.Types.ObjectId
 
 async function createFixture(req,res,next){
     const fixture=new Fixture()
     
- 
-    Fixture.deleteMany({venue:'stadium'}).then(function(){
+
+    Fixture.deleteMany({venue:'stadium3'}).then(function(){
         console.log("Data deleted"); // Success
     }).catch(function(error){
         console.log(error); // Failure
     });
+
    
     Fixture.find(async (err,data)=>{
         if(err){
@@ -19,7 +21,7 @@ async function createFixture(req,res,next){
 
         }
         else{
-           console.log(data)
+         //  console.log("fixtures     :",data)
         }
         
     })
@@ -36,7 +38,7 @@ async function createFixture(req,res,next){
             if(data.length==0){
                 let myData=req.body
 
-                fixture.competitionId=myData.competitionId
+                fixture.competitionId=ToId(myData.competitionId)
                 fixture.homeTeamId=myData.homeTeamId
                 fixture.awayTeamId=myData.awayTeamId
                 fixture.startTime=myData.startTime
@@ -50,7 +52,6 @@ async function createFixture(req,res,next){
                         return res.status(500).json({express:{payLoad:"server error",status:false}})
                     }
                     else{
-                       
                         CompetitionRegistration.findOne({_id:req.body.competitionId}).populate('competitionName')
                         .exec(function (err, data2) {
                             if(err){
@@ -59,7 +60,8 @@ async function createFixture(req,res,next){
                                 return res.status(500).json({express:{payLoad:"server error",status:false}})
                             }
                             else{
-                                if(data2.length==0){
+                            
+                                if(!data2){
                                     return res.status(200).json({express:{payLoad:"no competition use found",status:true}})
                                 }
                                 else{

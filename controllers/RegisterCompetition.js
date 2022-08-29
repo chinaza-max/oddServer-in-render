@@ -7,12 +7,12 @@ async function RegisterCompetition(req,res,next){
     
  
 /*
-    Competition.deleteMany({competitionType:'interSchool'}).then(function(){
+    Competition.deleteMany({competitionType:'intraSchool'}).then(function(){
         console.log("Data deleted"); // Success
     }).catch(function(error){
         console.log(error); // Failure
     });
-   
+   */
     Competition.find(async (err,data)=>{
         if(err){
             console.log("check RegisterCompetition controller ")
@@ -23,7 +23,7 @@ async function RegisterCompetition(req,res,next){
         }
         
     })
-    */
+    
 
     
     Competition.find({competitionType:req.body.competitionType,competitionName:req.body.competitionName,startDate:req.body.startDate,session:req.body.session},async (err,data)=>{

@@ -36,6 +36,6 @@ const fixtureSchema= new mongoose.Schema({
         default: "open" 
     } 
 },
-{ timestamp: true });
+{ timestamps: true });
 
 module.exports=mongoose.model("fixture",fixtureSchema);
