@@ -1,5 +1,6 @@
 const Result = require("../MongoDB/Model/Result");
 const FixtureOdds = require("../MongoDB/Model/Odds");
+const CompetitionRegistration =require("../MongoDB/Model/competitionRegistration")
 const {odds,formatOdd} =require("../oddCalculation/oddsGenerator")
 
 const calGoalExpectancy =async (req,res,next) => {
@@ -22,6 +23,14 @@ const calGoalExpectancy =async (req,res,next) => {
             //data.getTeamResults("ee")
         }
     })
+    CompetitionRegistration.find({},(eer,data)=>{
+       // console.log(data)
+        if(data){
+            //console.log("result     :",data)
+            //res.json({express:data})
+            //data.getTeamResults("ee")
+        }
+    })
     
     //console.log(test.getTotalscorePerCompetition())
     //console.log(results)
@@ -38,18 +47,17 @@ const calGoalExpectancy =async (req,res,next) => {
         const reduce = new formatOdd();
         let myOdds=reduce.ChangeOdd(engine.viewTable())
         
-        storeOdd(myOdds,home,away,fixtureId)
+        
         
     }
     else{
         
-        const result1 = await results.getTotalscorePerCompetition(competitionName,oddDate,competitionType,school,country,levelName);
-        const result2 = await results.getTotalscorePerTeam(competitionName,oddDate,homeTeamId,awayTeamId,competitionType,school,country,levelName);
-        return
-        console.log("result2")
-        console.log(result1)
-        console.log(result2)
-        console.log("result2")
+        let result1 = await results.getTotalscorePerCompetition(competitionName,oddDate,competitionType,school,country,levelName);
+        let result2 = await results.getTotalscorePerTeam(competitionName,oddDate,homeTeamId,awayTeamId,competitionType,school,country,levelName);
+        
+        result1 =result1[0]
+        result2 =result2[0]
+        
        if(result1.length==0||result2.length==0){
         const home=1.765
         const away= 1.353
@@ -66,71 +74,62 @@ const calGoalExpectancy =async (req,res,next) => {
         storeOdd(myOdds,home,away,fixtureId)
        }
        else{
+
+
+        
          //Goals Scored at Home Overall
-         let GSHO= toFixed(result1.totalHomeGoalScore/result1.totalGamePlayed)
+         let GSHO= (result1.totalHomeGoalScore/result1.totalGamePlayed).toFixed(2)
 
          //Goals Scored Away Overall
-         let GSAO= toFixed(result1.totalAwayGoalScore/result1.totalGamePlayed)
+         let GSAO= (result1.totalAwayGoalScore/result1.totalGamePlayed).toFixed(2)
  
  
          //Team Home Goal Average For
-         let THGA=toFixed(result2.homeTeamTotalGoalScore/result2.homeTeamTotalGamePlayed)
+         let THGA=(result2.homeTeamTotalGoalScore/result2.homeTeamTotalGamePlayed).toFixed(2)
  
          //Team Home Goal Average Against
-         let THGAA=toFixed(result2.homeTeamTotalGoalConceded/result2.homeTeamTotalGamePlayed)
+         let THGAA=(result2.homeTeamTotalGoalConceded/result2.homeTeamTotalGamePlayed).toFixed(2)
  
  
          //Team Away Goal Average For
-         let TAGA=toFixed(result2.awayTeamTotalGoalScore/result2.awayTeamTotalGamePlayed)
+         let TAGA=(result2.awayTeamTotalGoalScore/result2.awayTeamTotalGamePlayed).toFixed(2)
  
          //Team Away Goal Average Against
-         let TAGAA=toFixed(result2.awayTeamTotalGoalConceded/result2.awayTeamTotalGamePlayed)
+         let TAGAA=(result2.awayTeamTotalGoalConceded/result2.awayTeamTotalGamePlayed).toFixed(2)
  
          //Team’s Attack Strength
-         let HomeTeamStrength=toFixed(THGA/GSHO)
-         let AwayTeamStrength=toFixed(TAGA/GSAO)
+         let HomeTeamStrength=(THGA/GSHO).toFixed(2)
+         let AwayTeamStrength=(TAGA/GSAO).toFixed(2)
  
          //Team’s Defence Strength
-         let HomeTeamDefence=toFixed(THGAA/GSAO)
-         let AwayTeamDefence=toFixed(TAGAA/GSHO)
+         let HomeTeamDefence=(THGAA/GSAO).toFixed(2)
+         let AwayTeamDefence=(TAGAA/GSHO).toFixed(2)
  
          //Calculate Goal Expectancy
-         let HomeTeam=toFixed(HomeTeamStrength*AwayTeamDefence*GSHO)
-         let AwayTeam=toFixed(AwayTeamStrength*HomeTeamDefence*GSAO)
+         let HomeTeam=(HomeTeamStrength*AwayTeamDefence*GSHO).toFixed(2)
+         let AwayTeam=(AwayTeamStrength*HomeTeamDefence*GSAO).toFixed(2)
  
+         
+        console.log(HomeTeam)
+        console.log(AwayTeam)
+
          let engine = new odds(HomeTeam,AwayTeam);
          //init.Setting(66.5, 50.5);
          engine.CalculateOdds();
- 
-         // console.log(engine.viewTable());
- 
-         let reduce = new formatOdd();
-         //init.Setting(66.5, 50.5);
-         // reduce.CalculateOdds();
- 
-         console.log(reduce.ChangeOdd(engine.viewTable()));
-         /*
-         let engine = new odds(HomeTeam, AwayTeam);
-         engine.CalculateOdds();
-         
- 
+
          let reduce = new formatOdd();
  
          console.log(reduce.ChangeOdd(engine.viewTable()));
-         */
+         let myOdds=reduce.ChangeOdd(engine.viewTable())
+         storeOdd(myOdds,HomeTeam,AwayTeam,fixtureId)
+     
        }
    }
 
 
     
 function storeOdd(myOdds,home,away,fixtureId){
-    /*
-    console.log("-----------------------------------------------")
-    console.log("-----------------------------------------------")
-    console.log("-----------------------------------------------")
-    console.log("-----------------------------------------------")
-    console.log(fixtureId)
-    */
+
     const fixtureOdds=new FixtureOdds()
 
     fixtureOdds.fixtureId=fixtureId
@@ -262,7 +261,7 @@ function storeOdd(myOdds,home,away,fixtureId){
             return res.status(500).json({express:{payLoad:"server error",status:false}})
         }
         else{
-            res.status(200).json({express:{payLoad:"fixture sucessfully created ",status:true}})
+            res.status(200).json({express:{payLoad:data,status:true}})
         }
     })
 }

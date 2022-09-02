@@ -21,7 +21,7 @@ async function createFixture(req,res,next){
 
         }
         else{
-         //  console.log("fixtures     :",data)
+         //  console.log(data)
         }
         
     })

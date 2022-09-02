@@ -62,6 +62,10 @@ const ResultSchema= new mongoose.Schema({
 },
 { timestamps: true });
 
+
+
+
+
 ResultSchema.methods.getTable =async (competitionId) => {
     const aggregate = await this.model("resultS").aggregate([
 
@@ -145,7 +149,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
       },
       {
         $lookup: {
-          from: "fixture",
+          from: "fixtures",
           localField: "fixtureId",
           foreignField: "id",
           as: "fixture"
@@ -166,7 +170,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
       },
       {
         $lookup: {
-          from: "CompetitionRegistration",
+          from: "competitionregistrations",
           localField: "fixture.competitionId",
           foreignField: "id",
           as: "CompetitionRegistration"
@@ -226,7 +230,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
   }
   else{
   
-      this.model("resultS").aggregate([
+    const aggregate = await this.model("resultS").aggregate([
       {
         $match: {
           "createdAt": {
@@ -236,39 +240,96 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
       },
       {
         $lookup: {
-            from: "fixtures",
-            let: { "myFixtureId": "$fixtureId" },
-            pipeline: [
-                {
-                    $match: {
-                        $expr: { $eq: ["$_id", "$$myFixtureId"] }
-                    }
-                },
-                {
-                  $lookup: {
-                    from: "CompetitionRegistrations",
-                    let: { "myFixtureId": "$fixtureId" },
-                    pipeline: [
-                        {
-                          $match: {
-                              $expr: { $eq: [1, 1] }
-                          }
-                        },
-                    ],
-                    as: "CompetitionRegistrations"
-                }
-                 
-                },
-            ],
-            as: "fixture"
+          from: "fixtures",
+          localField: "fixtureId",
+          foreignField: "_id",
+          as: "fixture"
         }
-    }
-      ]).then((data)=>{
-        console.log("-------------data--------")
-        console.log("-------------data--------")
-       console.log(data[1])
-      });
+      }
+      ,
+      {
+        $unwind: "$fixture"
+      },
+      {
+        $match: {
+          "fixture.createdAt": {
+            $gte: new Date(date)
+          },
+          "fixture.status": {
+            $eq:"open"
+          }
+        }
+      }
+      ,
+      {
+        $lookup: {
+          from: "competitionregistrations",
+          localField: "fixture.competitionId",
+          foreignField: "_id",
+          as: "CompetitionRegistration"
+        }
+      }
+      ,
+      {
+        $unwind: "$CompetitionRegistration"
+      }
+      ,
+      {
+        $match: {
+          $and: [
+            {
+              "CompetitionRegistration.startDate": {
+                $gte: new Date(date)
+              }
+            },
+            {
+              "CompetitionRegistration.competitionName": {
+                $eq: competitionName
+              }
+            }
+            ,
+            {
+              "CompetitionRegistration.school": {
+                $eq: school
+              }
+            }
+            ,
+            {
+              "CompetitionRegistration.levelName": {
+                $eq: levelName
+              }
+            }
+          ]
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalGamePlayed: {
+            $sum: 1
+          },
+          totalHomeGoalScore: {
+            $sum: "$scores.home.goal"
+          },
+          totalAwayGoalScore: {
+            $sum: "$scores.away.goal"
+          }
+        }
+      },
+      {
+        $addFields: {
+          totalGoal: {
+            $add: [
+              "$totalHomeGoalScore",
+              "$totalAwayGoalScore"
+            ]
+          }
+        }
+      }
       
+      ])
+      return aggregate
+   
   }
 }
 
@@ -307,7 +368,7 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
       },
       {
         $lookup: {
-          from: "CompetitionRegistration",
+          from: "competitionregistrations",
           localField: "fixture.competitionId",
           foreignField: "id",
           as: "CompetitionRegistration"
@@ -440,9 +501,9 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
       },
       {
         $lookup: {
-          from: "fixture",
+          from: "fixtures",
           localField: "fixtureId",
-          foreignField: "id",
+          foreignField: "_id",
           as: "fixture"
         }
       },
@@ -455,21 +516,23 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
             $gte: new Date(date)
           },
           "fixture.status": {
-            $eq:"completed"
+            $eq:"open"
           }
         }
       },
       {
         $lookup: {
-          from: "CompetitionRegistration",
+          from: "competitionregistrations",
           localField: "fixture.competitionId",
-          foreignField: "id",
+          foreignField: "_id",
           as: "CompetitionRegistration"
         }
-      },
+      }
+      ,
       {
         $unwind: "$CompetitionRegistration"
-      },
+      }
+      ,
       {
         $match: {
           $and: [
@@ -587,8 +650,12 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
         }
       }
     ]);
-    return aggregate;
 
+
+    console.log("--------data-------")
+    console.log(aggregate)
+    console.log("--------data-------")
+    return aggregate;
   }
  
 }
@@ -709,3 +776,52 @@ module.exports=mongoose.model("resultS",ResultSchema);
         });
         return aggregate;
         */
+
+
+        /*
+         else{
+  
+      this.model("resultS").aggregate([
+      {
+        $match: {
+          "createdAt": {
+            $gte: new Date(date)
+          }
+        }
+      },
+      {
+        $lookup: {
+            from: "fixtures",
+            let: { "myFixtureId": "$fixtureId" },
+            pipeline: [
+                {
+                    $match: {
+                        $expr: { $eq: ["$_id", "$$myFixtureId"] }
+                    }
+                },
+                {
+                  $lookup: {
+                    from: "CompetitionRegistrations",
+                    let: { "mycompetitionId": "$competitionId" },
+                    pipeline: [
+                        {
+                          $match: {
+                              $expr: { $eq: [1, 1] }
+                          }
+                        },
+                    ],
+                    as: "CompetitionRegistration"
+                }
+                 
+                },
+            ],
+            as: "fixture"
+        }
+    }
+      ]).then((data)=>{
+        console.log("-------------data--------")
+        console.log("-------------data--------")
+       console.log(data[1])
+      });
+      
+  } */
