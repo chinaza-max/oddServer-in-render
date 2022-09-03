@@ -12,13 +12,15 @@ async function updateResult(req,res,next){
         console.log(error); // Failure
     });
    */
+
     Result.find(async (err,data)=>{
         if(err){
             console.log("check updateResult controller ")
             throw err
         }
         else{
-            console.log(data)
+         //   console.log(data)
+            
         }
         
     })
@@ -69,7 +71,9 @@ async function updateResult(req,res,next){
                         //res.status(500).send(err);
                         return res.status(500).json({express:{"payLoad":"server error","status":false}})
                     } else {
-                            res.status(200).json({express:doc});
+                        
+                            res.status(200).json({express:{payLoad:doc,status:true}})
+
                     }
                 });
 

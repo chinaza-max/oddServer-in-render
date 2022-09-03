@@ -1,18 +1,47 @@
 const Fixture =require("../MongoDB/Model/Fixture");
+const Odds =require("../MongoDB/Model/Odds")
 const CompetitionRegistration=require("../MongoDB/Model/competitionRegistration")
 const mongoose=require('mongoose')
+const Result = require("../MongoDB/Model/Result");
 const ToId=mongoose.Types.ObjectId
 
 async function createFixture(req,res,next){
     const fixture=new Fixture()
     
-
+    
+    /*
     Fixture.deleteMany({venue:'stadium3'}).then(function(){
         console.log("Data deleted"); // Success
     }).catch(function(error){
         console.log(error); // Failure
     });
+    
+    Odds.deleteMany({venue:'stadium3'}).then(function(){
+        console.log("Data deleted"); // Success
+    }).catch(function(error){
+        console.log(error); // Failure
+    });
+*/
+/*
+    Odds.find({},(eer,data)=>{
+        //console.log(data)
+       // console.log("Odds",data)
+        if(data){
+          //  console.log("result     :",data)
+        // res.json({express:data})
+            //data.getTeamResults("ee")
+        }
+    })
 
+    Result.find({},(eer,data)=>{
+        //console.log(data)
+        //console.log("Result",data)
+        if(data){
+            //console.log("result     :",data)
+        // res.json({express:data})
+            //data.getTeamResults("ee")
+        }
+    })
    
     Fixture.find(async (err,data)=>{
         if(err){
@@ -21,13 +50,14 @@ async function createFixture(req,res,next){
 
         }
         else{
-         //  console.log(data)
+            console.log("data")
+        //  console.log("fixture",data)
         }
         
     })
+*/
 
 
-    
     Fixture.find({homeTeamId:req.body.homeTeamId, awayTeamId:req.body.awayTeamId, startDate:req.body.startDate},async (err,data)=>{
         if(err){
             console.log("check CreateFixture controller ")
@@ -76,8 +106,6 @@ async function createFixture(req,res,next){
                                 }
                             }
                         })
-                      
-                       
                     }
                 })
             }
@@ -87,7 +115,7 @@ async function createFixture(req,res,next){
             }
         }
     })
-    
+
 }   
 
 module.exports = createFixture;

@@ -13,10 +13,10 @@ const calGoalExpectancy =async (req,res,next) => {
     const levelName=res.levelName;
     const fixtureId=res.fixtureId;
     const results  = await Result();
-    //console.log(homeTeamId,awayTeamId)
+    
     console.log(oddDate,homeTeamId,awayTeamId,competitionName,competitionType,school,country,levelName)
-    Result.find({},(eer,data)=>{
-        //console.log(data)
+   /* Result.find({},(eer,data)=>{
+       // console.log("Result",data)
         if(data){
             //console.log("result     :",data)
             //res.json({express:data})
@@ -24,7 +24,7 @@ const calGoalExpectancy =async (req,res,next) => {
         }
     })
     CompetitionRegistration.find({},(eer,data)=>{
-       // console.log(data)
+        //console.log("CompetitionRegistration",data)
         if(data){
             //console.log("result     :",data)
             //res.json({express:data})
@@ -34,6 +34,7 @@ const calGoalExpectancy =async (req,res,next) => {
     
     //console.log(test.getTotalscorePerCompetition())
     //console.log(results)
+    */
     if(results.length==0){
         const home=1.765
         const away= 1.353
@@ -48,17 +49,18 @@ const calGoalExpectancy =async (req,res,next) => {
         let myOdds=reduce.ChangeOdd(engine.viewTable())
         
         
-        
+        storeOdd(myOdds,home,away,fixtureId)
     }
     else{
         
         let result1 = await results.getTotalscorePerCompetition(competitionName,oddDate,competitionType,school,country,levelName);
         let result2 = await results.getTotalscorePerTeam(competitionName,oddDate,homeTeamId,awayTeamId,competitionType,school,country,levelName);
         
-        result1 =result1[0]
-        result2 =result2[0]
+
+        console.log(result2)
         
        if(result1.length==0||result2.length==0){
+       
         const home=1.765
         const away= 1.353
         const engine = new odds(home,away);
@@ -74,9 +76,10 @@ const calGoalExpectancy =async (req,res,next) => {
         storeOdd(myOdds,home,away,fixtureId)
        }
        else{
-
-
-        
+        result1 =result1[0]
+        result2 =result2[0]
+        console.log(result1)
+        console.log(result2)
          //Goals Scored at Home Overall
          let GSHO= (result1.totalHomeGoalScore/result1.totalGamePlayed).toFixed(2)
 
@@ -109,7 +112,8 @@ const calGoalExpectancy =async (req,res,next) => {
          let HomeTeam=(HomeTeamStrength*AwayTeamDefence*GSHO).toFixed(2)
          let AwayTeam=(AwayTeamStrength*HomeTeamDefence*GSAO).toFixed(2)
  
-         
+        console.log(result1)
+        console.log(result2)
         console.log(HomeTeam)
         console.log(AwayTeam)
 
@@ -119,7 +123,7 @@ const calGoalExpectancy =async (req,res,next) => {
 
          let reduce = new formatOdd();
  
-         console.log(reduce.ChangeOdd(engine.viewTable()));
+         //console.log(reduce.ChangeOdd(engine.viewTable()));
          let myOdds=reduce.ChangeOdd(engine.viewTable())
          storeOdd(myOdds,HomeTeam,AwayTeam,fixtureId)
      

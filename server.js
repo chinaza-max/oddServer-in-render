@@ -37,15 +37,20 @@ app.use(mongoSanitize());
 // see https://expressjs.com/en/guide/behind-proxies.html
 app.set('trust proxy', 1);
 
-//const router1=require('./Router/Account')
-
+const router1=require('./Router/Request')
 const router2=require('./Router/Post')
 
 //const router2=require('./router/post')
 //const router3=require('./router/request')
 //const router4=require('./router/settings')
 
-//app.use("/",router1);
+app.use("/",router1);
 app.use("/",router2);
 
 server.listen(port,()=>console.log(`server started.... ${port}`))
+
+/**
+  this help to solve mongodb error whe trying to connect
+    from Control Panel -> Administration -> Services -> MongoDB
+    control panel  -> system and security  ->Administrative tools  -> Services -> MongoDB
+ */

@@ -135,7 +135,7 @@ ResultSchema.methods.getTeamResults =async function getTeamResults (teamId) {
       console.log(aggregate)
     return aggregate;
 }
-let idToSearch = mongoose.Types.ObjectId("630b7536775debd0e468e95e")
+
 ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePerCompetition (competitionName,date,competitionType,school,country,levelName){
   
   if(competitionType=="interSchool"){
@@ -151,7 +151,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
         $lookup: {
           from: "fixtures",
           localField: "fixtureId",
-          foreignField: "id",
+          foreignField: "_id",
           as: "fixture"
         }
       },
@@ -172,7 +172,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
         $lookup: {
           from: "competitionregistrations",
           localField: "fixture.competitionId",
-          foreignField: "id",
+          foreignField: "_id",
           as: "CompetitionRegistration"
         }
       },
@@ -195,6 +195,12 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
             {
               "CompetitionRegistration.country": {
                 $eq: country
+              }
+            }
+            ,
+            {
+              "CompetitionRegistration.competitionType": {
+                $eq: competitionType
               }
             }
             
@@ -256,7 +262,7 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
             $gte: new Date(date)
           },
           "fixture.status": {
-            $eq:"open"
+            $eq:"completed"
           }
         }
       }
@@ -297,6 +303,12 @@ ResultSchema.methods.getTotalscorePerCompetition=async function getTotalscorePer
             {
               "CompetitionRegistration.levelName": {
                 $eq: levelName
+              }
+            }
+            ,
+            {
+              "CompetitionRegistration.competitionType": {
+                $eq: competitionType
               }
             }
           ]
@@ -347,9 +359,9 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
       },
       {
         $lookup: {
-          from: "fixture",
+          from: "fixtures",
           localField: "fixtureId",
-          foreignField: "id",
+          foreignField: "_id",
           as: "fixture"
         }
       },
@@ -370,7 +382,7 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
         $lookup: {
           from: "competitionregistrations",
           localField: "fixture.competitionId",
-          foreignField: "id",
+          foreignField: "_id",
           as: "CompetitionRegistration"
         }
       },
@@ -393,6 +405,12 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
             {
               "CompetitionRegistration.country": {
                 $eq: country
+              }
+            }
+            ,
+            {
+              "CompetitionRegistration.competitionType": {
+                $eq: competitionType
               }
             }
           ]
@@ -516,7 +534,7 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
             $gte: new Date(date)
           },
           "fixture.status": {
-            $eq:"open"
+            $eq:"completed"
           }
         }
       },
@@ -555,6 +573,12 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
               {
                 "CompetitionRegistration.levelName": {
                   $eq: levelName
+                }
+              }
+              ,
+              {
+                "CompetitionRegistration.competitionType": {
+                  $eq: competitionType
                 }
               }
           ]
@@ -651,10 +675,6 @@ ResultSchema.methods.getTotalscorePerTeam=async function (competitionName,date,h
       }
     ]);
 
-
-    console.log("--------data-------")
-    console.log(aggregate)
-    console.log("--------data-------")
     return aggregate;
   }
  
