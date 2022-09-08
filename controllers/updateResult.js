@@ -37,7 +37,6 @@ async function updateResult(req,res,next){
         
             if(data.length==0){
                 const myData=req.body
-                //console.log(myData.result)
                 result.fixtureId=ToId(myData.fixtureId)
                 result.scores.home.goal=myData.homeScore
                 result.scores.away.goal=myData.awayScore
@@ -68,7 +67,6 @@ async function updateResult(req,res,next){
                 Result.findOneAndUpdate({fixtureId:myData.fixtureId},update,{new: true}).exec(function(err, doc){
                     if(err) {
                         //console.log(err);
-                        //res.status(500).send(err);
                         return res.status(500).json({express:{"payLoad":"server error","status":false}})
                     } else {
                         

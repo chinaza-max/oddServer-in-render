@@ -10,12 +10,13 @@ async function createFixture(req,res,next){
     
     
     /*
-    Fixture.deleteMany({venue:'stadium3'}).then(function(){
+    Fixture.deleteMany({venue:'stadium5'}).then(function(){
         console.log("Data deleted"); // Success
     }).catch(function(error){
         console.log(error); // Failure
     });
-    
+    */
+    /*
     Odds.deleteMany({venue:'stadium3'}).then(function(){
         console.log("Data deleted"); // Success
     }).catch(function(error){

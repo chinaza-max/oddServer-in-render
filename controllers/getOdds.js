@@ -6,6 +6,13 @@ async function getOddsFun(req,res,next){
 
 
     console.log(req.query.fixtureId)
+    /*
+    Odds.find({},(eer,data)=>{
+        console.log(data)
+       // console.log("Odds",data)
+        if(data){}})
+        */
+ 
  
 /*
     odds.deleteMany({oddsType:'interSchool'}).then(function(){
@@ -38,12 +45,16 @@ async function getOddsFun(req,res,next){
             
             if(data.length==0){
 
-                console.log("data")
+                console.log(data)
                 res.status(200).json({express:{payLoad:"no odds found",status:true}})
             }
             else{
                 console.log("data")
-                console.log(data)
+                //console.log(data)
+                const keys = Object.keys(data[0].odds.correctScore);
+                console.log(keys); // ["apple", "orange", "pear"]
+                
+                res.status(200).json({express:{payLoad:data,status:true}})
             }
         }
     })

@@ -47,8 +47,7 @@ const calGoalExpectancy =async (req,res,next) => {
         //class instance reduce the calculated odds
         const reduce = new formatOdd();
         let myOdds=reduce.ChangeOdd(engine.viewTable())
-        
-        
+             
         storeOdd(myOdds,home,away,fixtureId)
     }
     else{
