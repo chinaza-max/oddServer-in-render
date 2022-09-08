@@ -1,5 +1,5 @@
-const Result = require("../MongoDB/Model/Result");
-const FixtureOdds = require("../MongoDB/Model/Odds");
+const Result = require("../MongoDB/Model/result");
+const FixtureOdds = require("../MongoDB/Model/odds");
 const CompetitionRegistration =require("../MongoDB/Model/competitionRegistration")
 const {odds,formatOdd} =require("../oddCalculation/oddsGenerator")
 

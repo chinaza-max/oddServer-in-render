@@ -1,4 +1,4 @@
-const Result =require("../MongoDB/Model/Result");
+const Result =require("../MongoDB/Model/result");
 const mongoose=require('mongoose')
 const ToId=mongoose.Types.ObjectId
 

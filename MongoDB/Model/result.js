@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+var ObjectID = mongoose.Types.ObjectId;
 
 const ResultSchema= new mongoose.Schema({
     fixtureId:{
@@ -66,39 +67,66 @@ const ResultSchema= new mongoose.Schema({
 
 
 
-ResultSchema.methods.getTable =async (competitionId) => {
+ResultSchema.methods.getTable =async function getTable(competitionId) {
+   competitionId = new ObjectID(competitionId)
     const aggregate = await this.model("resultS").aggregate([
-
       // do a join with the table fixture,  
       {
         $lookup: {
-          from: 'fixture',
+          from: 'fixtures',
           localField: 'fixtureId',
           foreignField: '_id',
           as: 'fixture',
         }
       },
+      { $unwind: '$scores' },
+
       { $unwind: '$fixture' },
       // do a join on another table called CompetitionRegistration
       {
         $lookup: {
-          from: 'CompetitionRegistration',
+          from: 'competitionregistrations',
           localField: 'fixture.competitionId',
           foreignField: '_id',
           as: 'competition',
         }
       },
       { $unwind: '$competition' },
-      { $match: {"competition._id": competitionId}  } 
-
-    
-      // group the data according to the competions
-    //   {
-    
-    //     $group: { _id: "$competition._id", competition: { $push: "$$ROOT" } }
-    
-    //   },
-    ]);
+      { $match: {"competition._id": competitionId}  } ,
+      {
+        $lookup: {
+          from: 'teams',
+          localField: 'fixture.homeTeamId',
+          foreignField: '_id',
+          as: 'homeTeam',
+        }
+      },
+      { $unwind: '$homeTeam' },
+      {
+        $lookup: {
+          from: 'teams',
+          localField: 'fixture.awayTeamId',
+          foreignField: '_id',
+          as: 'awayTeam',
+        }
+      },
+      { $unwind: '$awayTeam' },
+      // {
+      //   $group: {
+      //     _id: '$homeTeam.id',
+      //     totalGamePlayed: {
+      //       $sum: 1
+      //     },
+      //     totalHomeGoalScore: {
+      //       $sum: "$scores.home.goal"
+      //     },
+      //     totalAwayGoalScore: {
+      //       $sum: "$scores.away.goal"
+      //     }
+      //   }
+      // },
+       ]);
+       
     return aggregate;
 }
 
@@ -131,6 +159,117 @@ ResultSchema.methods.getTeamResults =async function getTeamResults (teamId) {
         { $match: 
             {$or:[{"fixture.homeTeamId": teamId},{"fixture.awayTeamId":teamId}]  } 
          },
+         {
+          $group: {
+            _id: null,
+            homeTeamTotalGoalScore: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: [
+                      "$fixture.homeId",
+                      homeId
+                    ]
+                  },
+                  then: "$homegoal",
+                  else: 0
+                }
+              }
+            },
+            homeTeamTotalGoalConceded: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: [
+                      "$fixture.homeId",
+                      homeId
+                    ]
+                  },
+                  then: "$awaygoal",
+                  else: 0
+                }
+              }
+            },
+            homeTeamTotalGamePlayed: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: [
+                      "$fixture.homeId",
+                      homeId
+                    ]
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            },
+            awayTeamTotalGoalScore: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: [
+                      "$fixture.awayId",
+                      awayId
+                    ]
+                  },
+                  then: "$awaygoal",
+                  else: 0
+                }
+              }
+            },
+            awayTeamTotalGoalConceded: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: [
+                      "$fixture.awayId",
+                      awayId
+                    ]
+                  },
+                  then: "$homegoal",
+                  else: 0
+                }
+              }
+            },
+            awayTeamTotalGamePlayed: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $eq: [
+                      "$fixture.awayId",
+                      awayId
+                    ]
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            },
+            points: {
+              $sum: {
+                $cond: {
+                  if: {
+                    $gt: [
+                      "$result.scores.home.goal" , "$result.scores.away.goal"
+                      
+                    ]
+                  },
+                  then: 3,
+                  if: {
+                    $eq: [
+                      "$result.scores.home.goal ","$result.scores.away.goal",
+                      awayId
+                    ]
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            }
+
+          }
+        }
       ]);
       console.log(aggregate)
     return aggregate;

@@ -10,7 +10,7 @@ const router=express.Router();
 
 
 const goalExpentancy=require("../controllers/goalExpentancy");
-const competitionRegistration = require("../controllers/RegisterCompetition");
+const competitionRegistration = require("../controllers/registerCompetition");
 const registerTeam = require("../controllers/registerTeam");
 const createFixture=require("../controllers/createFixture");
 const updateResult=require("../controllers/updateResult");
