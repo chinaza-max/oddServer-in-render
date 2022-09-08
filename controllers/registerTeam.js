@@ -1,4 +1,4 @@
-const Team =require("../MongoDB/Model/Team");
+const Team =require("../MongoDB/Model/team");
 
 
 

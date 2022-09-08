@@ -1,7 +1,7 @@
 'use strict';
 
 require("dotenv").config();
-require('./MongoDB/DB')
+require('./MongoDB/db')
 
 const http = require('http');
 const express = require('express');
@@ -37,15 +37,10 @@ app.use(mongoSanitize());
 // see https://expressjs.com/en/guide/behind-proxies.html
 app.set('trust proxy', 1);
 
-const router1=require('./Router/Request')
-const router2=require('./Router/Post')
+const router=require('./router/router')
 
-//const router2=require('./router/post')
-//const router3=require('./router/request')
-//const router4=require('./router/settings')
-
-app.use("/",router1);
-app.use("/",router2);
+//app.use("/",router1);
+router(app);
 
 server.listen(port,()=>console.log(`server started.... ${port}`))
 

@@ -1,5 +1,4 @@
-const Fixture =require("../MongoDB/Model/Fixture");
-const Odds =require("../MongoDB/Model/Odds")
+const Fixture =require("../MongoDB/Model/fixture");
 const CompetitionRegistration=require("../MongoDB/Model/competitionRegistration")
 const mongoose=require('mongoose')
 const Result = require("../MongoDB/Model/Result");

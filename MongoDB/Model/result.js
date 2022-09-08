@@ -1,4 +1,5 @@
 const mongoose=require('mongoose');
+var ObjectID = mongoose.Types.ObjectId;
 
 const ResultSchema= new mongoose.Schema({
     fixtureId:{
@@ -66,39 +67,66 @@ const ResultSchema= new mongoose.Schema({
 
 
 
-ResultSchema.methods.getTable =async (competitionId) => {
+ResultSchema.methods.getTable =async function getTable(competitionId) {
+   competitionId = new ObjectID(competitionId)
     const aggregate = await this.model("resultS").aggregate([
-
       // do a join with the table fixture,  
       {
         $lookup: {
-          from: 'fixture',
+          from: 'fixtures',
           localField: 'fixtureId',
           foreignField: '_id',
           as: 'fixture',
         }
       },
+      { $unwind: '$scores' },
+
       { $unwind: '$fixture' },
       // do a join on another table called CompetitionRegistration
       {
         $lookup: {
-          from: 'CompetitionRegistration',
+          from: 'competitionregistrations',
           localField: 'fixture.competitionId',
           foreignField: '_id',
           as: 'competition',
         }
       },
       { $unwind: '$competition' },
-      { $match: {"competition._id": competitionId}  } 
-
-    
-      // group the data according to the competions
-    //   {
-    
-    //     $group: { _id: "$competition._id", competition: { $push: "$$ROOT" } }
-    
-    //   },
-    ]);
+      { $match: {"competition._id": competitionId}  } ,
+      {
+        $lookup: {
+          from: 'teams',
+          localField: 'fixture.homeTeamId',
+          foreignField: '_id',
+          as: 'homeTeam',
+        }
+      },
+      { $unwind: '$homeTeam' },
+      {
+        $lookup: {
+          from: 'teams',
+          localField: 'fixture.awayTeamId',
+          foreignField: '_id',
+          as: 'awayTeam',
+        }
+      },
+      { $unwind: '$awayTeam' },
+      // {
+      //   $group: {
+      //     _id: '$homeTeam.id',
+      //     totalGamePlayed: {
+      //       $sum: 1
+      //     },
+      //     totalHomeGoalScore: {
+      //       $sum: "$scores.home.goal"
+      //     },
+      //     totalAwayGoalScore: {
+      //       $sum: "$scores.away.goal"
+      //     }
+      //   }
+      // },
+       ]);
+       
     return aggregate;
 }
 
