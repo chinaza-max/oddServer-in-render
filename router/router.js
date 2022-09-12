@@ -9,7 +9,8 @@ const allRoutes = require("express").Router();
 module.exports = (app) => {
     allRoutes.use('/account', account);
     allRoutes.use('/settings', settings);
+    allRoutes.use('/request', request);
     allRoutes.use('/admin-settings', post);
-    allRoutes.use('/user-settings', request);
+   // allRoutes.use('/user-settings', request);
     app.use("/", allRoutes);
 }

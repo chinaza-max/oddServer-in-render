@@ -39,7 +39,7 @@ app.set('trust proxy', 1);
 
 const router=require('./router/router')
 
-//app.use("/",router1);
+//app.
 router(app);
 
 server.listen(port,()=>console.log(`server started.... ${port}`))

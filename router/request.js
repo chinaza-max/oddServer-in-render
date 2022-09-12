@@ -20,9 +20,6 @@ router.get('/getOdds',getOdds,(req, res)=>{
 })
 router.get('/getTable/:id',leagueTable)
 
-router.get('/getCurrentTable',(req, res)=>{
-     
-})
 
 
 
