@@ -1,4 +1,4 @@
-const Odds =require("../MongoDB/Model/Odds");
+const Odds =require("../MongoDB/Model/odds");
 
 
 
