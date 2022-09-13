@@ -45,20 +45,10 @@ async function getOddsFun(req,res,next){
             
             if(data.length==0){
 
-                console.log(data)
                 res.status(200).json({express:{payLoad:"no odds found",status:true}})
             }
             else{
-                console.log("data")
-                //console.log(data)
-                const keys = Object.keys(data[0].odds.correctScore);
-                const Val = Object.values(data[0].odds.correctScore);
-               // console.log(keys); 
-               // console.log(Val); 
-
-
-
-
+                
                 class formatOdd{
                     constructor(Market, Odd, marketType) {
                         this.Market = Market;
@@ -75,22 +65,21 @@ async function getOddsFun(req,res,next){
                     CalculateOdds() {
                         
                         this.CorrectScore();
-                       /* this.GoalLessDraw();
+                        this.GoalLessDraw();
                         this.Draw();
                         this.HomeWIN();
                         this.AwayWIN();
-                        this.Under(under)
-                        this.Over(over)
+                        this.Under()
+                        this.Over()
                         this.GoalGoal()
                         this.GoalGoalAndHomeWin()
-                        this.GoalGoalAndAwayWin()*/
+                        this.GoalGoalAndAwayWin()
                     }
                    
                     CorrectScore() {
                         let correctScore = []
                 
                         for (let i = 0; i < Object.keys(data[0].odds.correctScore).length; i++) {
-
                             const market=Object.values(data[0].odds.correctScore)[i].market;
                             const myOdd=Object.values(data[0].odds.correctScore)[i].odd;
                             const marketType=Object.keys(data[0].odds.correctScore)[i]
@@ -107,167 +96,103 @@ async function getOddsFun(req,res,next){
                     }
                 
                     Draw() {
-                        let total = 0,
-                            odd = 0
-                
-                        for (let i = 0; i <= this.GoalLeve; i++) {
-                
-                            total += this.Home[i] * this.Away[i];
-                            if (i == this.GoalLeve) {
-                                odd = 1 / total;
-                                let objs = new node("Draw", odd.toFixed(2));
-                                this.Odds["Draw"] = objs;
-                            }
-                        }
+                        const market=Object.values(data[0].odds.Draw)[0]
+                        const myOdd=Object.values(data[0].odds.Draw)[1]
+                        const marketType="Draw"
+                      
+                        let objs = new formatOdd(market,myOdd,marketType)
+                        this.Odds["Draw"] = objs;
+                        
                     }
                     GoalLessDraw() {
-                        let total = this.Home[0] * this.Away[0];
+                        const market=Object.values(data[0].odds.GoalLessDraw)[0]
+                        const myOdd=Object.values(data[0].odds.GoalLessDraw)[1]
+                        const marketType="GoalLessDraw"
+                    
                 
-                        let objs = new node("GLD", (1 / total).toFixed(2), this.GoalLessDrawR)
+                        let objs = new formatOdd(market,myOdd,marketType)
                 
                         this.Odds["GoalLessDraw"] = objs;
                     }
                     HomeWIN() {
-                        let total = 0;
-                        for (let i = 1; i <= this.GoalLeve; i++) {
-                            for (let j = 0; j <= this.GoalLeve; j++) {
-                                if (i > j) {
-                                    total += this.Home[i] * this.Away[j];
-                                }
-                                else {
-                                    break;
-                                }
-                            }
-                            if (i == this.GoalLeve) {
-                                let odd = 1 / total;
-                                let objs = new node("HomeWIN", odd.toFixed(2));
-                                this.Odds["HomeWIN"] = objs;
-                            }
-                        }
+                        const market=Object.values(data[0].odds.HomeWIN)[0]
+                        const myOdd=Object.values(data[0].odds.HomeWIN)[1]
+                        const marketType="HomeWIN"
+                        
+                
+                        let objs = new formatOdd(market,myOdd,marketType)
+                        this.Odds["HomeWIN"] = objs;
+                         
                     }
                     AwayWIN() {
-                        let total = 0;
-                        for (let i = 1; i <= this.GoalLeve; i++) {
-                            for (let j = 0; j <= this.GoalLeve; j++) {
-                                if (i > j) {
-                                    total += this.Away[i] * this.Home[j];
-                                }
-                                else {
-                                    break
-                                }
-                            }
-                            if (i == this.GoalLeve) {
-                                let odd = 1 / total;
-                                let objs = new node("AwayWIN", odd.toFixed(2));
-                                this.Odds["AwayWIN"] = objs;
-                            }
-                        }
+                        const market=Object.values(data[0].odds.AwayWIN)[0]
+                        const myOdd=Object.values(data[0].odds.AwayWIN)[1]
+                        const marketType="AwayWIN"
+                
+                        let objs = new formatOdd(market,myOdd,marketType)
+                        this.Odds["AwayWIN"] = objs;
                     }
-                    Under(under) {
+                    Under() {
                         let Under = [];
                 
-                        for (let i = 0; i <= under.length; i++) {
+                        for (let i = 0; i < Object.keys(data[0].odds.Under).length; i++) {
                 
-                            let total = 0
-                            for (let j = 0; j < this.UnderM[i]; j++) {
-                                for (let k = 0; k <= this.UnderM[i]; k++) {
-                
-                                    if (j + k > under[i]) {
-                                        break;
-                                    } else {
-                                        total += this.Home[j] * this.Away[k];
-                                    }
-                                }
-                                if (j + 1 == this.UnderM[i]) {
-                                    let odd = 1 / total;
-                                    let objs = new node(`${under[i]}.5`, odd.toFixed(2));
-                                    Under.push(objs);
-                                }
-                            }
-                
-                            if (i == under.length) {
+                            const market=Object.values(data[0].odds.Under)[i].market;
+                            const myOdd=Object.values(data[0].odds.Under)[i].odd;
+                            const marketType=Object.keys(data[0].odds.Under)[i]
+
+                            let objs = new formatOdd(market,myOdd,marketType)
+                            Under.push(objs);
+                            if (i ==  Object.keys(data[0].odds.Under).length-1) {
                                 this.Odds["Under"] = Under;
                             }
                         }
                     }
-                    Over(over) {
+                    Over() {
                 
                         let Over = [];
-                        for (let i = 0; i < over.length; i++) {
-                            let total = 0;
-                            for (let j = 0; j <= this.GoalLeve; j++) {
-                                for (let k = 0; k <= this.GoalLeve; k++) {
+                        for (let i = 0; i < Object.keys(data[0].odds.Over).length; i++) {
                 
-                                    if (j + k >= over[i]) {
-                                        // console.log(`--${j}----${k}-`)
-                                        total += this.Home[j] * this.Away[k];
-                
-                                    }
-                                }
-                                if (j == this.GoalLeve) {
-                                    let odd = 1 / total;
-                                    let objs = new node(`${over[i] - 1}.5`, odd.toFixed(2));
-                                    Over.push(objs);
-                                    //console.log(`--add up-`)
-                                }
-                            }
-                            if (i + 1 == over.length) {
+                            const market=Object.values(data[0].odds.Over)[i].market;
+                            const myOdd=Object.values(data[0].odds.Over)[i].odd;
+                            const marketType=Object.keys(data[0].odds.Over)[i]
+
+                            let objs = new formatOdd(market,myOdd,marketType)
+                            Over.push(objs);
+                            if (i ==  Object.keys(data[0].odds.Over).length-1) {
                                 this.Odds["Over"] = Over;
                             }
                         }
                     }
                     GoalGoal() {
-                        let total = 0
-                        for (let i = 1; i <= this.GoalLeve; i++) {
-                            for (let j = 1; j <= this.GoalLeve; j++) {
-                                // console.log(`${i}---${j}`)
-                                total += this.Home[1] * this.Away[j];
-                            }
-                            if (i == this.GoalLeve) {
-                                let odd = 1 / total;
-                                let objs = new node("GG", odd.toFixed(2));
-                                this.Odds["GoalGoal"] = objs;
-                            }
-                        }   
+                        const market=Object.values(data[0].odds.GoalGoal)[0]
+                        const myOdd=Object.values(data[0].odds.GoalGoal)[1]
+                        const marketType="GoalGoal"
+                
+                        let objs = new formatOdd(market,myOdd,marketType)
+                        this.Odds["GoalGoal"] = objs;
+                     
                     }
                     GoalGoalAndHomeWin(){
-                        let total = 0
-                        for (let i = 1; i <= this.GoalLeve; i++) {
-                            for (let j = 1; j <= this.GoalLeve; j++) {
-                                 
-                                 if(i>j){
-                                    total += this.Home[i] * this.Away[j];
-                                 }
-                                 else{
-                                     break;
-                                 }
-                                
-                            }
-                            if (i == this.GoalLeve) {
-                                let odd = 1 / total;
-                                let objs = new node("GGH", odd.toFixed(2));
-                                this.Odds["GoalGoalAndHomeWin"] = objs;
-                            }
-                        }
+                        const market=Object.values(data[0].odds.GoalGoalAndHomeWin)[0]
+                        const myOdd=Object.values(data[0].odds.GoalGoalAndHomeWin)[1]
+                        const marketType="GoalGoalAndHomeWin"
+                       
+                        let objs = new formatOdd(market,myOdd,marketType)
+                        this.Odds["GoalGoalAndHomeWin"] = objs;
+                      
                     }
                     GoalGoalAndAwayWin(){
-                        let total = 0
-                        for (let i = 1; i <= this.GoalLeve; i++) {
-                            for (let j = 2; j <= this.GoalLeve; j++) {
-                            
-                                 if(j>i){
-                                   // console.log(`---------yes-------`)
-                                    //console.log(`${i}---${j}`)
-                                   // console.log(`---------yes--------`)
-                                    total += this.Home[i] * this.Away[j];
-                                 }
-                            }
-                            if (i == this.GoalLeve) {
-                                let odd = 1 / total;
-                                let objs = new node("GGA", odd.toFixed(2));
-                                this.Odds["GoalGoalAndAwayWin"] = objs;
-                            }
-                        }
+                        const market=Object.values(data[0].odds.GoalGoalAndAwayWin)[0]
+                        const myOdd=Object.values(data[0].odds.GoalGoalAndAwayWin)[1]
+                        const marketType="GoalGoalAndAwayWin"
+                        console.log(market); 
+                        console.log(myOdd);
+                        console.log(marketType); 
+                
+                        let objs = new formatOdd(market,myOdd,marketType)
+                            this.Odds["GoalGoalAndAwayWin"] = objs;
+                        
                     }
                     viewTable() {
                         return this.Odds
@@ -275,12 +200,8 @@ async function getOddsFun(req,res,next){
                 }
                 
                 let init = new myOddClass()
-                //init.Setting(66.5, 50.5);
                 init.CalculateOdds()
                 let table = init.viewTable()
-                console.log(table);
-         
-                
                 
                 res.status(200).json({express:{payLoad:table,status:true}})
             }

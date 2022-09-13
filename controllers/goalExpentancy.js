@@ -111,10 +111,7 @@ const calGoalExpectancy =async (req,res,next) => {
          let HomeTeam=(HomeTeamStrength*AwayTeamDefence*GSHO).toFixed(2)
          let AwayTeam=(AwayTeamStrength*HomeTeamDefence*GSAO).toFixed(2)
  
-        console.log(result1)
-        console.log(result2)
-        console.log(HomeTeam)
-        console.log(AwayTeam)
+        
 
          let engine = new odds(HomeTeam,AwayTeam);
          //init.Setting(66.5, 50.5);
