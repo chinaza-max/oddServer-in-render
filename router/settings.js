@@ -3,6 +3,7 @@ const passport=require('passport')
 const rateLimit = require('express-rate-limit')
 const Cookie = require('cookie');
 const changeGoalExpectancy = require("../controllers/changeGoalExpectancy");
+const changeOdd = require("../controllers/changeOdd");
 const router=express.Router();
 
 
@@ -19,7 +20,7 @@ const router=express.Router();
 router.post('/changeGoalExpectancy',changeGoalExpectancy,(req, res)=>{
     
 })
-router.post('/changeOdd',(req, res)=>{
+router.post('/changeOdd',changeOdd,(req, res)=>{
      
 })
 
