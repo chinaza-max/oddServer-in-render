@@ -13,7 +13,7 @@ const superAdminSchema= new mongoose.Schema({
         trim:true
     }, 
     tel:{ 
-        type:String,
+        type:Number,
         required:true,
         trim:true
     },
@@ -26,8 +26,21 @@ const superAdminSchema= new mongoose.Schema({
         type:String,
         required:true,
         trim:true
+    },
+    accountNumber:{
+        type:Number,
+        required:true,
+        trim:true
+    },
+    accountName:{
+        type:String,
+        required:true
+    },
+    bank:{
+        type:String,
+        required:true
     }
 },
-{ timestamp: true });
+{ timestamps: true });
 
 module.exports=mongoose.model("superAdmin",superAdminSchema);

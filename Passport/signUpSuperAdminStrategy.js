@@ -1,5 +1,5 @@
 const bcrypt=require('bcrypt');
-const User=require("../MongoDB/Model/User/SuperAdmin")
+const User=require("../MongoDB/Model/User/superAdmin")
 const jwt = require('jsonwebtoken');
 const LocalStrategy=require('passport-local').Strategy
 const Redis = require('ioredis')
@@ -15,14 +15,15 @@ const redis = new Redis({
 const maxNumberOfFailedLogins = 3;
 const timeWindowForFailedLogins = 60 * 60 * 1;
 
-const signUpSuperAdmin=new LocalStrategy({usernameField: 'userName',
-passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=>{
+const signUpSuperAdmin=new LocalStrategy({usernameField:'tel',
+passwordField:'passWord',passReqToCallback: true},(req,tel,passWord,done)=>{
             
     const user=new User()
-
-        User.findOne({userName}).then( async(resultUser, err)=>{
-
-            if(err){
+    
+        console.log(tel)
+        User.find({ $or: [ { tel: { $eq: tel } }, { email: { $eq: req.body.email } }] } ).then( async(resultUser, err)=>{
+                if(err){
+                console.log(err)
                 return done(err,null)
             } 
 
@@ -34,25 +35,38 @@ passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=
             }
 
             */
-            if(resultUser){
+
+            console.log(resultUser)
+            if(resultUser.length!=0){
+
+               
                     //open later
                     // await redis.set(tel, ++userAttempts, 'ex', timeWindowForFailedLogins)
                     return done({"payLoad":"user already exit","status":false},null)
             }
             else{
                 try{ 
+                    
 
-                    const hashedPassword=await bcrypt.hash(password,10)
-                    user.password=hashedPassword,
-                    user.firstName=userName,
-                    user.lastName=userName,
-                    user.tel=userName,
-                    user.email=userName,
+
+                    const hashedPassword=await bcrypt.hash(passWord,10)
+                    user.passWord=hashedPassword,
+                    user.firstName=req.body.firstName,
+                    user.lastName=req.body.lastName,
+                    user.tel=req.body.tel,
+                    user.email=req.body.email,
+                    user.accountNumber=req.body.accountNumber,
+                    user.accountName=req.body.accountName,
+                    user.bank=req.body.bank,
                     user.save(async function(err,data){
+
                         if(err){
+                            console.log(err)
                             return done(err,null)
                         }
                         else{
+                            console.log(data)
+
                             //open later
                             //await redis.del(user.tel)
 
@@ -60,7 +74,6 @@ passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=
                             let payload2={"id":data.id}
                             
                             try{
-
 
                                 jwt.sign(payload1,process.env.APP_PRIVATE_KEY_JWT, { algorithm: 'RS256',expiresIn: '5s'}, function(err,accessToken) {
                                     if(err)throw err;
@@ -77,7 +90,6 @@ passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=
                                 console.log("check signUpSuperAdmin file where the jwt is been signed")
                                 throw e
                             }
-                            
                         }
                     })
                 }
@@ -86,7 +98,6 @@ passwordField: 'password',passReqToCallback: true},(req,userName,password,done)=
                 }
             }
         })
-    
 })
 
 module.exports=signUpSuperAdmin;

@@ -52,6 +52,7 @@ router.post('/signupSuperAdmin',(req, res, next)=>{
         }));
         */
         //user id(from mongoDB) is sent back;
+        
         return res.status(200).json({express:{"payLoad":user.payload2,"status":true}})
     })(req, res, next)
 })
@@ -99,8 +100,6 @@ router.post('/loginAdmin',(req, res, next)=>{
     })(req, res, next)
 })
 
-
-
 //loginSignUpRateLimiter
 router.post('/loginSuperAdmin',(req, res, next)=>{
     passport.authenticate("local-loginSuperAdmin",(err, user, info) =>{
@@ -139,6 +138,10 @@ router.post('/loginStaff',(req, res, next)=>{
         return res.status(200).json({express:{"payLoad":user.payload2,"status":true}})
     })(req, res, next)
 })
+
+
+
+
 
 
 module.exports=router;

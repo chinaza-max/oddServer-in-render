@@ -1,7 +1,6 @@
 const passport=require('passport')
-//const User=require("../MongoDB/Models/Users")
 const signUpAdminStrategy=require("./signUpAdminStrategy")
-const signUpSuperAdminStrategy=require("./loginSuperAdminStrategy")
+const signUpSuperAdminStrategy=require("./signUpSuperAdminStrategy")
 const signupStaffStrategy=require("./signupStaffStrategy")
 
 const loginAdminStrategy=require("./loginAdminStrategy")
@@ -17,6 +16,7 @@ passport.deserializeUser((id,done)=>{
     })
 })
 */
+
 passport.use("local-signUpAdmin",signUpAdminStrategy)
 passport.use("local-signUpSuperAdmin",signUpSuperAdminStrategy)
 passport.use("local-signupStaff",signupStaffStrategy)

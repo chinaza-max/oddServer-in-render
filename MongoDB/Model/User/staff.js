@@ -13,7 +13,7 @@ const staffSchema= new mongoose.Schema({
         trim:true
     }, 
     tel:{ 
-        type:String,
+        type:Number,
         required:true,
         trim:true
     },
@@ -26,8 +26,23 @@ const staffSchema= new mongoose.Schema({
         type:String,
         required:true,
         trim:true
+    },
+    accountNumber:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    accountName:{
+        type:String,
+        required:true,
+        trim:true
+    },
+    bank:{
+        type:String,
+        required:true,
+        trim:true
     }
 },
-{ timestamp: true });
+{ timestamps: true });
 
 module.exports=mongoose.model("staff",staffSchema);
