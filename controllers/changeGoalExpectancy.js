@@ -1,5 +1,6 @@
 const {odds,formatOdd} =require("../oddCalculation/oddsGenerator")
-const FixtureOdds =require("../MongoDB/Model/Odds")
+const FixtureOdds =require("../MongoDB/Model/odds")
+//const Fixture=require("../MongoDB/Model/fixture")
 
 
 
