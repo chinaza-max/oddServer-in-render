@@ -4,7 +4,8 @@ const mongoose=require('mongoose')
 const Result = require("../MongoDB/Model/result");
 const ToId=mongoose.Types.ObjectId
 
-async function createFixture(req,res,next){
+module.exports = {
+ createFixture: async function createFixture(req,res,next){
     const fixture=new Fixture()
     
     
@@ -116,6 +117,84 @@ async function createFixture(req,res,next){
         }
     })
 
-}   
+},
+deleteFixture: async (req,res)=>{
+    const fixId = req.params.id
+    await Fixture.findByIdAndDelete(fixId,(err,data)=>{
+        if (err){
+            console.log(err)
+            res.status(500).json({express:{payLoad:"server error",status:false}})
+    }
+    else if(data){
+        res.status(200).json({express:{payLoad:"success",status:true}})
+    }
+        else {
+            res.status(403).json({express:{payLoad:"fixture does not exit",status:true}})
 
-module.exports = createFixture;
+        }
+    })
+},
+updateFixture: async (req,res)=>{
+    const fixId= req.params.id
+ const newFixUpdate = req.body;
+ Fixture.findByIdAndUpdate(fixId,newFixUpdate,(err,data)=>{
+    if (err){
+        console.log(err)
+        res.status(500).json({express:{payLoad:"server error",status:false}})
+}
+else if(data){
+    res.status(200).json({express:{payLoad:"success",status:true}})
+}
+    else {
+        res.status(403).json({express:{payLoad:"fixture does not exit",status:true}})
+
+    }
+}  )
+ 
+},
+getFixture: async (req,res)=>{
+    const fixId = req.params.id
+    Fixture.findById(fixId,(err,data)=>{
+        if(err){
+            console.log("getFixture error")
+            return res.status(500).json({express:{payLoad:"server error",status:false}})
+
+        }
+        else{
+            return res.status(200).json({express:{payLoad:data,status:true}})
+        }
+        
+    })
+
+},
+getAllFixtureBasedOnCompetition: async (req,res)=>{
+    const compId = req.params.id
+    Fixture.find({competitionId:compId},(err,data)=>{
+        if(err){
+            console.log("getAllFixtureBasedOnCompetition error")
+            return res.status(500).json({express:{payLoad:"server error",status:false}})
+
+        }
+        else{
+            return res.status(200).json({express:{payLoad:data,status:true}})
+        }
+        
+    })
+        
+    
+},
+getAllFixtureBasedOnTeam: async (req,res)=>{
+    const teamId = req.params.id
+    Fixture.find({$or: [{homeTeamId:teamId} , {awayTeamId:teamId}]},(err,data)=>{
+        if(err){
+            console.log("getAllFixtureBasedOnTeam error")
+            return res.status(500).json({express:{payLoad:"server error",status:false}})
+
+        }
+        else{
+            return res.status(200).json({express:{payLoad:data,status:true}})
+        }
+        
+    })
+}}   
+
