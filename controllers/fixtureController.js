@@ -112,7 +112,7 @@ module.exports = {
             }
             else{
                 console.log(data)
-                res.status(403).json({express:{payLoad:"fixture already exit",status:true}})
+              return  res.status(403).json({express:{payLoad:"fixture already exit",status:true}})
             }
         }
     })
@@ -120,16 +120,25 @@ module.exports = {
 },
 deleteFixture: async (req,res)=>{
     const fixId = req.params.id
-    await Fixture.findByIdAndDelete(fixId,(err,data)=>{
+    await Fixture.findByIdAndDelete(fixId,async (err,data)=>{
         if (err){
             console.log(err)
-            res.status(500).json({express:{payLoad:"server error",status:false}})
+          return  res.status(500).json({express:{payLoad:"server error",status:false}})
     }
     else if(data){
-        res.status(200).json({express:{payLoad:"success",status:true}})
+        await Result.findOneAndDelete({fixtureId:fixtureId},(err,data)=>{
+            if (err){
+                console.log(err)
+              return  res.status(500).json({express:{payLoad:"server error",status:false}})
+        }
+        else{
+           return  res.status(200).json({express:{payLoad:"success",status:true}})
+
+        }});
+      return  res.status(200).json({express:{payLoad:"success",status:true}})
     }
         else {
-            res.status(403).json({express:{payLoad:"fixture does not exit",status:true}})
+          return  res.status(403).json({express:{payLoad:"fixture does not exit",status:true}})
 
         }
     })
@@ -140,13 +149,13 @@ updateFixture: async (req,res)=>{
  Fixture.findByIdAndUpdate(fixId,newFixUpdate,(err,data)=>{
     if (err){
         console.log(err)
-        res.status(500).json({express:{payLoad:"server error",status:false}})
+      return  res.status(500).json({express:{payLoad:"server error",status:false}})
 }
 else if(data){
-    res.status(200).json({express:{payLoad:"success",status:true}})
+  return  res.status(200).json({express:{payLoad:"success",status:true}})
 }
     else {
-        res.status(403).json({express:{payLoad:"fixture does not exit",status:true}})
+      return  res.status(403).json({express:{payLoad:"fixture does not exit",status:true}})
 
     }
 }  )

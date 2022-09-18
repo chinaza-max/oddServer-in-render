@@ -1,8 +1,9 @@
 const Result =require("../MongoDB/Model/result");
-const mongoose=require('mongoose')
-const ToId=mongoose.Types.ObjectId
+const mongoose=require('mongoose');
+const ToId=mongoose.Types.ObjectId;
 
-async function updateResult(req,res,next){
+module.exports = {
+updateResult : async function updateResult(req,res,next){
     const result=new Result()
     
 /*
@@ -70,7 +71,7 @@ async function updateResult(req,res,next){
                         return res.status(500).json({express:{"payLoad":"server error","status":false}})
                     } else {
                         
-                            res.status(200).json({express:{payLoad:doc,status:true}})
+                          return  res.status(200).json({express:{payLoad:doc,status:true}})
 
                     }
                 });
@@ -79,6 +80,35 @@ async function updateResult(req,res,next){
         }
     })
     
-}   
+},
+getResult : async (res,req)=>{
+    const fixtureId = req.params.id
+    Result.find({fixtureId:fixtureId},(err,data)=>{
+        if(err){
+            console.log("getResult error")
+            return res.status(500).json({express:{payLoad:"server error",status:false}})
 
-module.exports = updateResult;
+        }
+        else{
+            return res.status(200).json({express:{payLoad:data,status:true}})
+        }
+        
+    })
+},
+deleteResult : async (res,req)=>{
+    const fixtureId = req.params.id
+    await Result.findOneAndDelete({fixtureId:fixtureId},(err,data)=>{
+        if (err){
+            console.log(err)
+          return  res.status(500).json({express:{payLoad:"server error",status:false}})
+    }
+    else if(data){
+      return  res.status(200).json({express:{payLoad:"success",status:true}})
+    }
+        else {
+          return  res.status(403).json({express:{payLoad:"result does not exit",status:true}})
+
+        }
+    })
+}
+};

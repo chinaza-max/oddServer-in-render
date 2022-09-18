@@ -1,4 +1,4 @@
-const FixtureOdds =require("../MongoDB/Model/Odds")
+const FixtureOdds =require("../MongoDB/Model/odds")
 
 
 
