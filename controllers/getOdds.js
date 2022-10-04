@@ -1,11 +1,11 @@
-const Odds =require("../MongoDB/Model/Odds");
+const Odds =require("../MongoDB/Model/odds");
 
 
 
 async function getOddsFun(req,res,next){
 
 
-    console.log(req.query.fixtureId)
+    console.log(req.params.id)
     /*
     Odds.find({},(eer,data)=>{
         console.log(data)
@@ -34,7 +34,7 @@ async function getOddsFun(req,res,next){
     */
 
     
-    Odds.find({fixtureId:req.query.fixtureId},async (err,data)=>{
+    Odds.find({fixtureId:req.params.id},async (err,data)=>{
         
         if(err){
             console.log("check getOdds controller ")

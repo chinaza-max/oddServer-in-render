@@ -21,7 +21,7 @@ const router=express.Router();
  -----------------------------
  */
 
-router.post('/changeGoalExpectancy',changeGoalExpectancy,(req, res)=>{
+router.put('/changeGoalExpectancy/:id',changeGoalExpectancy,(req, res)=>{
     
 })
 router.post('/changeOdd',changeOdd,(req, res)=>{})
@@ -35,11 +35,10 @@ router.post('/changeOdd',changeOdd,(req, res)=>{})
  -----------------------------
  */
 
-router.post('/deleteStaff',deleteStaff,(req, res)=>{})
+router.delete('/deleteStaff/:id',deleteStaff,(req, res)=>{})
 
-router.post('/deleteAdmin',deleteAdmin,(req, res)=>{})
+router.delete('/deleteAdmin/:id',deleteAdmin,(req, res)=>{})
 
-router.post('/deleteSuperAdmin',deleteSuperAdmin,(req, res)=>{})
-
+router.delete('/deleteSuperAdmin/:id',deleteSuperAdmin,(req, res)=>{})
 
 module.exports=router;

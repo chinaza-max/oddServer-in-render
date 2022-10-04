@@ -4,7 +4,7 @@ const User =require("../MongoDB/Model/User/admin");
 async function deleteAdmin(req,res,next){
     const user=new User()
     
-    User.deleteOne({_id:req.body.id}).then(function(data){
+    User.deleteOne({_id:req.params.id}).then(function(data){
 
         res.status(200).json({express:{payLoad:data,status:true}})
    

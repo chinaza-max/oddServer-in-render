@@ -45,7 +45,6 @@ router.post('/RegisterCompetition',competitionRegistration,(req, res)=>{
     res.status(200).json({express:{payLoad:"Competition created sucessfully ",status:true}})
 });
 
-
 router.post('/RegisterTeam',registerTeam,(req, res)=>{
     res.status(200).json({express:{payLoad:"Registerteam created sucessfully ",status:true}})
 });

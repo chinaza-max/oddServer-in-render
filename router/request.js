@@ -7,20 +7,9 @@ const router=express.Router();
 const getOdds=require("../controllers/getOdds")
 const getSuperAdmin=require("../controllers/getSuperAdmin")
 
-
-
-
-
-
-
-
 router.get('/fixture',(req, res)=>{})
-router.get('/getOdds',getOdds,(req, res)=>{})
+router.get('/getOdds/:id',getOdds,(req, res)=>{})
 router.get('/getTable/:id',leagueTable)
 router.get('/getSuperAdmin',getSuperAdmin,(req, res)=>{})
-
-
-
-
 
 module.exports=router;

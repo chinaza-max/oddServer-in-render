@@ -6,10 +6,11 @@ const FixtureOdds =require("../MongoDB/Model/odds")
 
 async function changeGoalExpectancy(req,res,next){
 
-    if(req.body.fixtureId){
+    console.log(req.params.id)
+
         const home=req.body.home
         const away=req.body.away
-        const fixtureId=req.body.fixtureId
+        const fixtureId=req.params.id
         const engine = new odds(home,away);
    
         //method calculate odda
@@ -18,7 +19,7 @@ async function changeGoalExpectancy(req,res,next){
         let myOdds=reduce.ChangeOdd(engine.viewTable())
              
         storeOdd(myOdds,home,away,fixtureId)
-    }
+    
     function storeOdd(myOdds,home,away,fixtureId){
 
         const fixtureOdds=new FixtureOdds()
