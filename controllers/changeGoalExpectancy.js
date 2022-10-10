@@ -6,8 +6,6 @@ const FixtureOdds =require("../MongoDB/Model/odds")
 
 async function changeGoalExpectancy(req,res,next){
 
-    console.log(req.params.id)
-
         const home=req.body.home
         const away=req.body.away
         const fixtureId=req.params.id

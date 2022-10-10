@@ -6,6 +6,8 @@ module.exports = {
 updateResult : async function updateResult(req,res,next){
     const result=new Result()
     
+
+
 /*
     Result.deleteMany({"result.type":'win'}).then(function(){
         console.log("Data deleted"); // Success
@@ -13,7 +15,7 @@ updateResult : async function updateResult(req,res,next){
         console.log(error); // Failure
     });
    */
-
+/*
     Result.find(async (err,data)=>{
         if(err){
             console.log("check updateResult controller ")
@@ -25,20 +27,19 @@ updateResult : async function updateResult(req,res,next){
         }
         
     })
+*/
 
-
-    
-    Result.find({fixtureId:req.body.fixtureId},async (err,data)=>{
+   
+    Result.find({fixtureId:req.params.id},async (err,data)=>{
         if(err){
             console.log("check updateResult controller ")
             return res.status(500).json({express:{payLoad:"server error",status:false}})
         }
         else{
-            console.log(data)
-        
+          
             if(data.length==0){
                 const myData=req.body
-                result.fixtureId=ToId(myData.fixtureId)
+                result.fixtureId=ToId(req.params.id)
                 result.scores.home.goal=myData.homeScore
                 result.scores.away.goal=myData.awayScore
                 result.Cards.redCard.home=myData.redCardHome
@@ -65,7 +66,7 @@ updateResult : async function updateResult(req,res,next){
                      "Cards.yellowCard.home":myData.yellowCardHome, "Cards.yellowCard.away":myData.yellowCardAway},
                      "$set": { "session":myData.session} }
         
-                Result.findOneAndUpdate({fixtureId:myData.fixtureId},update,{new: true}).exec(function(err, doc){
+                Result.findOneAndUpdate({fixtureId:req.params.id},update,{new: true}).exec(function(err, doc){
                     if(err) {
                         //console.log(err);
                         return res.status(500).json({express:{"payLoad":"server error","status":false}})
@@ -74,8 +75,7 @@ updateResult : async function updateResult(req,res,next){
                           return  res.status(200).json({express:{payLoad:doc,status:true}})
 
                     }
-                });
-
+                })
             }
         }
     })

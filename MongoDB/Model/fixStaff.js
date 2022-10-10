@@ -11,7 +11,6 @@ const fixStaffSchema = new mongoose.Schema({
                 enum: ["open", "completed", "ongoing", "cancelled"],
                 default: "open"
             }
-
         }]
     },
     staffId:{

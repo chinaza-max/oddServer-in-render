@@ -52,8 +52,8 @@ const loginSuperAdmin=new LocalStrategy({usernameField: 'tel',
                     //open later
                     //await redis.del(user.tel)
     
-                    let payload1={"id":user[0].id,"tel":user[0].tel}
-                    let payload2={"id":user[0].id}
+                    let payload1={"id":user[0].id,"tel":user[0].tel,type:"superAdmin"}
+                    let payload2={"id":user[0].id,type:"superAdmin"}
                     try{
                         jwt.sign(payload1,process.env.APP_PRIVATE_KEY_JWT, { algorithm: 'RS256',expiresIn: '5s'}, function(err,accessToken) {
                             if(err)throw err;

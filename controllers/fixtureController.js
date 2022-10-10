@@ -145,7 +145,7 @@ deleteFixture: async (req,res)=>{
 },
 updateFixture: async (req,res)=>{
     const fixId= req.params.id
- const newFixUpdate = req.body;
+    const newFixUpdate = req.body;
  Fixture.findByIdAndUpdate(fixId,newFixUpdate,(err,data)=>{
     if (err){
         console.log(err)
@@ -189,8 +189,6 @@ getAllFixtureBasedOnCompetition: async (req,res)=>{
         }
         
     })
-        
-    
 },
 getAllFixtureBasedOnTeam: async (req,res)=>{
     const teamId = req.params.id

@@ -4,8 +4,10 @@ const FixtureOdds =require("../MongoDB/Model/odds")
 
 async function changeOdd(req,res,next){
 
-    if(req.body.fixtureId){
-        const fixtureId=req.body.fixtureId
+    function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
+
+    if(isNumber(req.body.to)){
+        const fixtureId=req.params.id
         const update = {"$set": {[`odds.${req.body.marketPath}.odd`]:req.body.to}}
             
         FixtureOdds.findOneAndUpdate({fixtureId},update,{new: true}).exec(function(err, doc){
@@ -18,7 +20,7 @@ async function changeOdd(req,res,next){
         }
         });
     }
-
+      
 }   
 
 module.exports = changeOdd;

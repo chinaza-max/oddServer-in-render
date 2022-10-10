@@ -7,6 +7,7 @@ const changeOdd = require("../controllers/changeOdd");
 const deleteSuperAdmin = require("../controllers/deleteSuperAdmin");
 const deleteAdmin = require("../controllers/deleteAdmin");
 const deleteStaff = require("../controllers/deleteStaff");
+const verifyJWTAdmin = require("../controllers/adminDeserializeJWT")
 
 const router=express.Router();
 
@@ -21,10 +22,10 @@ const router=express.Router();
  -----------------------------
  */
 
-router.put('/changeGoalExpectancy/:id',changeGoalExpectancy,(req, res)=>{
-    
-})
-router.post('/changeOdd',changeOdd,(req, res)=>{})
+router.put('/changeGoalExpectancy/:id',verifyJWTAdmin,changeGoalExpectancy,(req, res)=>{})
+
+router.put('/changeOdd/:id',verifyJWTAdmin,changeOdd,(req, res)=>{})
+
 
 
 
@@ -35,10 +36,10 @@ router.post('/changeOdd',changeOdd,(req, res)=>{})
  -----------------------------
  */
 
-router.delete('/deleteStaff/:id',deleteStaff,(req, res)=>{})
+router.delete('/deleteStaff/:id',verifyJWTAdmin,deleteStaff,(req, res)=>{})
 
-router.delete('/deleteAdmin/:id',deleteAdmin,(req, res)=>{})
+router.delete('/deleteAdmin/:id',verifyJWTAdmin,deleteAdmin,(req, res)=>{})
 
-router.delete('/deleteSuperAdmin/:id',deleteSuperAdmin,(req, res)=>{})
+router.delete('/deleteSuperAdmin/:id',verifyJWTAdmin,deleteSuperAdmin,(req, res)=>{})
 
 module.exports=router;
