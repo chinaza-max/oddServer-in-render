@@ -29,6 +29,11 @@ const fixtureSchema= new mongoose.Schema({
         required:true,
         trim:true
     },
+    hasBeenAssigned:{ 
+        type:Boolean,
+        required:true,
+        default: false
+    },
     status:{ 
         type:String,
         required:true,
