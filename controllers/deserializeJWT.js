@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
  function deserializeJWT(req,res,next){
     
     let cookies=Cookie.parse(req.headers.cookie || '');
-   console.log(cookies)
 
     //this condition check if user cookie exist if not user have to login
     if(Object.keys(cookies).length === 0 && cookies.constructor === Object||cookies==""){
@@ -53,7 +52,6 @@ const jwt = require('jsonwebtoken');
                                         }));
                                         req.userId = decoded.id;
 
-                                        console.log(req.userId)
                                         next()
                                     }
                                 });

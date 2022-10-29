@@ -15,6 +15,8 @@ const { register} = require("../controllers/registerPaticipatingTeams");
 const { deleteFixture } = require("../controllers/fixtureController");
 const  verifyJWTAdmin = require("../controllers/adminDeserializeJWT")
 const  verifyJWT = require("../controllers/deserializeJWT")
+const  csrfProtection = require("../controllers/csrfProtection")
+
 
 
 /*const axios = require('axios');
@@ -63,7 +65,7 @@ router.get('/get-all-fixture-based-on-team/:id',verifyJWT,getAllFixtureBasedOnTe
 router.get('/get-fixture/:id',verifyJWT,getAllFixtureBasedOnTeam);
 
 
-router.put('/updateResult/:id',verifyJWTAdmin,updateResult);
+router.put('/updateResult/:id',csrfProtection,verifyJWTAdmin,updateResult);
 router.get('/get-result',verifyJWT,getResult);
 router.delete('/delete-result',verifyJWTAdmin,deleteResult);
 
