@@ -20,7 +20,6 @@ passwordField:'passWord',passReqToCallback: true},(req,tel,passWord,done)=>{
             
     const user=new User()
     
-        console.log(tel)
         User.find({ $or: [ { tel: { $eq: tel } }, { email: { $eq: req.body.email } }] } ).then( async(resultUser, err)=>{
                 if(err){
                 console.log(err)
@@ -36,7 +35,6 @@ passwordField:'passWord',passReqToCallback: true},(req,tel,passWord,done)=>{
 
             */
 
-            console.log(resultUser)
             if(resultUser.length!=0){
 
                
