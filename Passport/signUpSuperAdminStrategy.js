@@ -22,9 +22,9 @@ passwordField:'passWord',passReqToCallback: true},(req,tel,passWord,done)=>{
     
         User.find({ $or: [ { tel: { $eq: tel } }, { email: { $eq: req.body.email } }] } ).then( async(resultUser, err)=>{
                 if(err){
-                console.log(err)
-                return done(err,null)
-            } 
+                    console.log(err)
+                    return done(err,null)
+               } 
 
                 //open later
                 /*
@@ -56,6 +56,7 @@ passwordField:'passWord',passReqToCallback: true},(req,tel,passWord,done)=>{
                     user.accountNumber=req.body.accountNumber,
                     user.accountName=req.body.accountName,
                     user.bank=req.body.bank,
+                    user.sa='SA',
                     user.save(async function(err,data){
 
                         if(err){

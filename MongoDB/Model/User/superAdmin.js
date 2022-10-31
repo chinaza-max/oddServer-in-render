@@ -40,6 +40,12 @@ const superAdminSchema= new mongoose.Schema({
         type:String,
         required:true
     }
+    ,
+    sa:{
+        type:String,
+        enum: ['SA', 'ADMIN', 'EDITOR', 'GUEST'],
+        required:true
+    }
 },
 { timestamps: true });
 

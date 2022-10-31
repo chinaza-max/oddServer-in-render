@@ -55,6 +55,7 @@ passwordField:'passWord',passReqToCallback: true},(req,tel,passWord,done)=>{
             user.accountNumber=req.body.accountNumber,
             user.accountName=req.body.accountName,
             user.bank=req.body.bank,
+            user.sa='EDITOR',
             user.save(async function(err,data){
 
                 if(err){

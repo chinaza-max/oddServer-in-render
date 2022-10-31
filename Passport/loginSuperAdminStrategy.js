@@ -51,9 +51,19 @@ const loginSuperAdmin=new LocalStrategy({usernameField: 'tel',
                     
                     //open later
                     //await redis.del(user.tel)
-    
+
                     let payload1={"id":user[0].id,"tel":user[0].tel,type:"superAdmin"}
                     let payload2={"id":user[0].id,type:"superAdmin"}
+                    let myUser=  {
+                        id: user[0].id,
+                        role: user[0].sa,
+                        name: user[0].firstName,
+                        username:user[0].firstName,
+                        email: user[0].email,
+                        avatar: '/assets/images/face-6.jpg',
+                        age: 25,
+                      }
+
                     try{
                         jwt.sign(payload1,process.env.APP_PRIVATE_KEY_JWT, { algorithm: 'RS256',expiresIn: '5s'}, function(err,accessToken) {
                             if(err)throw err;
@@ -61,7 +71,7 @@ const loginSuperAdmin=new LocalStrategy({usernameField: 'tel',
                                 jwt.sign(payload2,process.env.APP_PRIVATE_KEY_JWT, { algorithm: 'RS256',expiresIn: '1y'}, function(err,refreshToken) {
                                     if(err)throw err;
                                     else{
-                                        return done(null,{accessToken,refreshToken,payload2})
+                                        return done(null,{accessToken,refreshToken,payload2,myUser})
                                     }
                                 });
                             }

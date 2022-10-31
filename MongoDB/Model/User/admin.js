@@ -42,6 +42,12 @@ const adminSchema= new mongoose.Schema({
         required:true,
         trim:true
     }
+    ,
+    sa:{
+        type:String,
+        enum: ['SA', 'ADMIN', 'EDITOR', 'GUEST'],
+        required:true
+    }
 },
 { timestamps: true });
 
