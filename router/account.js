@@ -45,15 +45,15 @@ router.post('/signupSuperAdmin',(req, res, next)=>{
             httpOnly: true,
         }));
 
-        /*
+        
         res.setHeader('Set-Cookie', Cookie.serialize('refreshToken',user.refreshToken, {
             httpOnly: true,
             maxAge: 3.154e10
         }));
-        */
+        
         //user id(from mongoDB) is sent back;
         
-        return res.status(200).json({express:{"payLoad":user.payload2,"status":true}})
+        return res.status(200).json({express:{payLoad:user.myUser,accessToken:user.accessToken,status:true}})
     })(req, res, next)
 })
 
